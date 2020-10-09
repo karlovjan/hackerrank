@@ -1,8 +1,10 @@
 package ai;
 
 import java.awt.*;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,158 +14,177 @@ class SavePrincessTest {
         /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
 
 
-        List<List<String>> grid = null;
+        PrincessMatrix princessMatrix = null;
+
         try {
-//            grid = generateGridFromScanner();
-            grid = generateGridFromIO();
+            princessMatrix = generateGridFromScanner();
+//            princessMatrix = generateGridFromIO();
+        } catch (NumberFormatException e) {
+            System.err.println("First set value must be a number from 3 to 99");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
 
+
+        //immutable list!!!
+        List<List<Character>> grid = princessMatrix != null ? princessMatrix.getMatrix() : null;
 
         if (grid != null && grid.size() >= 3 && grid.size() < 100) {
             grid.forEach(r -> {
                 r.forEach(System.out::print);
                 System.out.println();
             });
+
+            System.out.println(princessMatrix.getBotPoint().toString());
+            System.out.println(princessMatrix.getPrincessPoint().toString());
         } else {
             System.err.println("Grid has not size 3 <= N < 100");
         }
     }
 
-    private static List<List<String>> generateGridFromScanner() throws Exception {
-        int dim = 0;
-
-        List<List<String>> grid = null;
-        List<String> row;
+    private static PrincessMatrix generateGridFromScanner() throws Exception {
+        int dim;
 
         try (Scanner scan = new Scanner(System.in)) {
 
             dim = scan.nextInt();
 
-            grid = new ArrayList<>(dim);
-
             scan.nextLine();
 
-            Point bot = null;
-            Point princess = null;
-
-            char nextChar;
             char[] rowChars;
 
+
+            PrincessMatrix princessMatrix = new PrincessMatrix(dim);
+
             for (int i = 0; i < dim; i++) {
-                row = new ArrayList<>(dim);
                 rowChars = scan.next().toCharArray();
-                for (int j = 0; j < dim; j++) {
 
-                    nextChar = rowChars[j];
-                    switch (nextChar) {
-                        case 'm':
-                            if (bot != null) {
-                                throw new Exception("Bot is already set!");
-                            }
-
-                            bot = new Point(i, j);
-                            break;
-                        case 'p':
-                            if (princess != null) {
-                                throw new Exception("Princess is already set!");
-                            }
-
-                            princess = new Point(i, j);
-                            break;
-                        case '-':
-                            row.add(String.valueOf(nextChar));
-                            break;
-                        default:
-                            j--;//stay at the same index
-
-                            break;
-                    }
-
-                }
+                princessMatrix.addMatrixRow(rowChars);
 
                 scan.nextLine();
 
-                if (row.size() != dim) {
-                    throw new Exception(String.format("Row %d has not size %d of set grid row %d", i, row.size(), dim));
-                }
-
-                grid.add(row);
 
             }
+
+            return princessMatrix;
+
         }
 
-        return grid;
     }
 
-    private static List<List<String>> generateGridFromIO() throws Exception {
-        int dim = 0;
+    private static PrincessMatrix generateGridFromIO() throws Exception {
+        int dim;
 
-        List<List<String>> grid = null;
-        List<String> row;
+//        Console cnsl = System.console() je null
+
 
         byte[] dimBytes = System.in.readNBytes(1);
-        dim = Integer.valueOf(new String(dimBytes, StandardCharsets.UTF_8));
+        dim = Integer.parseInt(new String(dimBytes, StandardCharsets.UTF_8));
 
-        grid = new ArrayList<>(dim);
 
+        if (dim < 3 || dim >= 100) {
+            throw new NumberFormatException();
+        }
         //read a new line
-//        System.in.read();
-        System.in.skip(1);
+        System.in.read();
 
-        Point bot = null;
-        Point princess = null;
-
-        char nextChar;
         char[] rowChars;
-
+        PrincessMatrix princessMatrix = new PrincessMatrix(dim);
         for (int i = 0; i < dim; i++) {
-            row = new ArrayList<>(dim);
-            //dim + 1 = escape new line char
-            rowChars = new String(System.in.readNBytes(dim ), StandardCharsets.UTF_8).toCharArray();
+//            rowChars = new char[dim];
+            rowChars = new String(System.in.readNBytes(dim), StandardCharsets.UTF_8).toCharArray();
+
             //read a new line
-//            System.in.read();
+            clearInputBuffer();
 
-            if(rowChars.length < dim){
-                throw new Exception("You have set less columns then " + dim);
+            princessMatrix.addMatrixRow(rowChars);
+
+        }
+
+        return princessMatrix;
+    }
+
+    private static void clearInputBuffer() throws IOException {
+        while (((char) System.in.read()) != '\n') {
+//clearing rest of buffereeed inputs
+        }
+    }
+
+    private static class PrincessMatrix {
+
+        private Point botPoint, princessPoint;
+        private final int matrixDimension;
+        private final List<List<Character>> matrix;
+
+        PrincessMatrix(int matrixDimension) {
+            this.matrixDimension = matrixDimension;
+            matrix = new ArrayList<>(matrixDimension);
+        }
+
+        void addMatrixRow(char[] input) throws Exception {
+            parseSystemInput(input);
+        }
+
+        private void parseSystemInput(char[] input) throws Exception {
+            if (input.length < matrixDimension) {
+                throw new Exception("You have set less columns then " + matrixDimension);
             }
-            for (int j = 0; j < dim; j++) {
+            char nextChar;
+            List<Character> matrixRow = new ArrayList<>(matrixDimension);
 
-                nextChar = rowChars[j];
+            for (int j = 0; j < matrixDimension; j++) {
+
+                //System.lineSeparator()
+                nextChar = input[j];
                 switch (nextChar) {
                     case 'm':
-                        if (bot != null) {
+                        if (botPoint != null) {
                             throw new Exception("Bot is already set!");
                         }
 
-                        bot = new Point(i, j);
+                        botPoint = new Point(matrix.size(), matrixRow.size());
+                        matrixRow.add(nextChar);
                         break;
                     case 'p':
-                        if (princess != null) {
+                        if (princessPoint != null) {
                             throw new Exception("Princess is already set!");
                         }
 
-                        princess = new Point(i, j);
+                        princessPoint = new Point(matrix.size(), matrixRow.size());
+                        matrixRow.add(nextChar);
                         break;
                     case '-':
-                        row.add(String.valueOf(nextChar));
+                        matrixRow.add(nextChar);
                         break;
+                    case '\n':
+                    case '\r':
+                    case ' ':
+                        break;
+
                     default:
-                        throw new Exception("Wrong char! You can set only -, 1xm, 1xp!");
+                        throw new Exception("Wrong char! You can set only '-', one time 'm' and 'p'!");
                 }
 
             }
 
 
-            if (row.size() != dim) {
-                throw new Exception(String.format("Row %d has not size %d of set grid row %d", i, row.size(), dim));
+            if (matrixRow.size() != matrixDimension) {
+                throw new Exception(String.format("Matrix Row %d has size %d but it should have a size %d", matrix.size() + 1, matrixRow.size(), matrixDimension));
             }
 
-            grid.add(row);
-
+            matrix.add(Collections.unmodifiableList(matrixRow));
         }
 
-        return grid;
+        public Point getBotPoint() {
+            return botPoint;
+        }
+
+        public Point getPrincessPoint() {
+            return princessPoint;
+        }
+
+        public List<List<Character>> getMatrix() {
+            return Collections.unmodifiableList(matrix);
+        }
     }
 }
