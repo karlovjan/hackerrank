@@ -9,17 +9,16 @@ import org.junit.jupiter.api.Test;
 /**
  * https://www.hackerrank.com/challenges/30-binary-numbers/tutorial
  */
-public class BinaryNumbersTest {
+class BinaryNumbersTest {
 
 	/**
-	 *
 	 * @param n base-10 integer from 1 to 1000000
-	 * @return
+	 * @return max consecutive 1's
 	 */
-	private static int getMaxNumberOfConsecutiveOnesInBinaryNumber(int n){
-		if(1 <= n && n <= 1000000){
+	private static int getMaxNumberOfConsecutiveOnesInBinaryNumber(int n) {
+		if (1 <= n && n <= 1000000) {
 
-			return Arrays.asList(Integer.toBinaryString(n).split("0")).stream().mapToInt(String::length).max().orElse(0);
+			return Arrays.stream(Integer.toBinaryString(n).split("0")).mapToInt(String::length).max().orElse(0);
 		}
 
 		return 0;

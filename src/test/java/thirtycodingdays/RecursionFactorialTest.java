@@ -7,16 +7,15 @@ import org.junit.jupiter.api.Test;
 /**
  * Write a factorial function that takes a positive integer,  as a parameter and prints the result of  ( factorial).
  */
-public class RecursionFactorialTest {
+class RecursionFactorialTest {
 
 	private static int factorial(int n) {
 
-
-		if(n <= 1){
+		if (n <= 1) {
 			return 1;
 		}
 
-		return n * factorial(n-1);
+		return n * factorial(n - 1);
 	}
 
 	@Test
