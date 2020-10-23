@@ -2,8 +2,6 @@ package thirtycodingdays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import javax.swing.text.NumberFormatter;
-
 import org.junit.jupiter.api.Test;
 
 public class OperatorsTest {
