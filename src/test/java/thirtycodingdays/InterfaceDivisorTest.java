@@ -24,7 +24,7 @@ public class InterfaceDivisorTest {
 		Číslo a je násobkem čísla b (číslo b je dělitelem čísla a) právě tehdy,
 		když existuje přirozené číslo n tak, že a=n⋅b.
 
-přirozené číslo
+přirozené číslo - the natural number
 http://ksp.mff.cuni.cz/forum/topic_show.pl?tid=1581
 Kladne cislo vetsi nez nula.
 
@@ -52,6 +52,7 @@ Prvocislo
 17=1⋅17
 Množina všech dělitelů čísla 17: D(17)={1;17}
 
+Prime number
 Prvocislem neni cislo 1
 
 Prvociselny rozklad cisla: 126
@@ -72,7 +73,9 @@ Prvociselny rozklad cisla: 126
 
 			Stream.Builder<Integer> builder = Stream.builder();
 
+			//set first divisor 1
 			builder.accept(1);
+			//set last divisor, the number itself,divide by yourself
 			builder.accept(a);
 
 			int max = a / 2; //deleno prvnim prvocislem
