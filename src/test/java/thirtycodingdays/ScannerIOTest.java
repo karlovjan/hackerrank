@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,6 +35,19 @@ class ScannerIOTest {
         List<String> results = getEvenAndOddChars(count, texts);
 
         results.forEach(System.out::println);
+    }
+
+    static void readLineOfIntegers(){
+        String[] arrItems;
+        try (final Scanner scanner = new Scanner(System.in)) {
+            arrItems = scanner.nextLine().split(" ");
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+        }
+
+        Stream.of(arrItems).mapToInt(Integer::valueOf).
+        for(String n : arrItems){
+
+        }
     }
 
     private static List<String> getEvenAndOddChars(int count, List<String> inputStrings) {
