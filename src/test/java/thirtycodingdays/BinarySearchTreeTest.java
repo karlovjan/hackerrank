@@ -3,6 +3,7 @@ package thirtycodingdays;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -143,4 +144,65 @@ A traversal of some binary tree, t, is an algorithm that iterates through each n
 		assertIterableEquals(List.of(3, 2, 5, 1, 4, 7),
 				levelOrder.stream().map(n -> n.data).collect(Collectors.toList()));
 	}
+
+
+	/*
+
+
+	The binary tree above has the following traversals:
+
+InOrder: 1 2 3 4 5 6 7
+PostOrder: 1 3 2 5 7 6 4
+PreOrder (a depth-first-search or DFS): 4 2 1 3 6 5 7
+Level-Order(breadth-first-search (BFS)): 4 2 6 1 3 5 7
+
+	 */
+
+	void inOrder(Node root, List<Integer> result) {
+		if(root != null) {
+			inOrder(root.left, result);
+			if(result == null){
+				result = new ArrayList<>();
+			}
+			result.add(root.data);
+
+			inOrder(root.right, result);
+		}
+	}
+
+	@Test
+	void inOrderTest() {
+		List<Integer> result = new ArrayList<>();
+		Node root = generateBST(new int[] { 3, 5, 4, 7, 2, 1, 9 });
+
+		inOrder(root, result);
+
+		assertIterableEquals(List.of(1, 2, 3, 4, 5, 7, 9), result);
+	}
+
+	void postOrderTraversing(Node root, List<Integer> result) {
+		if(root != null) {
+			postOrderTraversing(root.left, result);
+			postOrderTraversing(root.right, result);
+
+			if(result == null){
+				result = new ArrayList<>();
+			}
+			result.add(root.data);
+		}
+	}
+
+	@Test
+	void postOrderTraversingTest() {
+		List<Integer> result = new ArrayList<>();
+		Node root = generateBST(new int[] { 3, 5, 4, 7, 2, 1, 6 });
+
+		postOrderTraversing(root, result);
+
+		assertIterableEquals(List.of(1, 3, 2, 5, 7, 6, 4), result);
+
+		//TODO prepracovat generateBST tak aby vracela root uprostred tedy aby vysledny strom byl symetricky a ne aby byl u prostredniho nodu left/right null
+		//aby Node root = generateBST(new int[] { 3, 5, 4, 7, 2, 1, 6 }); root = 4 a 4[2, 6], 2[1,3], 6[5,7]
+	}
+
 }
