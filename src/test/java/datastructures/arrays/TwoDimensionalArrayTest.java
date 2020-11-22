@@ -1,4 +1,4 @@
-package datastructures;
+package datastructures.arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
