@@ -170,7 +170,7 @@ public class TwoDimensionalArrayTest {
 	 * @param queries queries[m][3]
 	 * @return the max item after all operations
 	 */
-	private long arrayManipulation(int n, int[][] queries) {
+/*	private long arrayManipulation(int n, int[][] queries) {
 
 		long max = 0;
 
@@ -249,6 +249,49 @@ public class TwoDimensionalArrayTest {
 
 	}
 
+ */
+	private long arrayManipulationVer2(int n, int[][] queries) {
+
+		int a;
+		int b;
+		long add;
+		long maxSum = 0;
+
+		//a a b odpovidaji indexum v poli a nemusime delat a -1 a b -1
+		// tak zvetsime o jedno pole nazacatku a na konci takze celkem o dvepole na n + 2
+
+		long[] resultArray = new long[n + 2];
+
+		//O(m)
+		for (int[] query : queries) {
+
+			a = query[0];
+			b = query[1];
+			add = query[2];
+
+			//od indexu a az do b ma pole hodnotu add, za hodnotou b bude puvodni hodnota v indexu b + 1
+			//vytvarime vlastne takove schody, ktere stoupaji o scitanou hodnotu v dnem useku pokud maximum roste
+			// a pak klesaji pokud scitame mensi hodnotu nez je maximum
+			resultArray[a] += add;
+			resultArray[b + 1] -= add;
+
+		}
+
+		long sum = 0;
+		//musime provest secteni vsech hodnot v poli resultArray
+		//O(n)
+		for (long l : resultArray) {
+			sum += l;
+			if (maxSum < sum) {
+				maxSum = sum;
+			}
+		}
+
+		return maxSum;
+
+		//Vysledna casova slozitost je O(m + n)
+	}
+
 	@Test
 	void arrayManipulationVer21Test() {
 		assertEquals(200L, arrayManipulationVer2(5,
@@ -262,10 +305,15 @@ public class TwoDimensionalArrayTest {
 	}
 
 	@Test
+	void arrayManipulationVer26Test() {
+		assertEquals(11L, arrayManipulationVer2(10,
+				new int[][] { new int[] { 4, 5, 3 }, new int[] { 2, 4, 7 }, new int[] { 1, 9, 1 } }));
+	}
+
+	@Test
 	void arrayManipulationVer23Test() {
 		//test minimal
-		assertEquals(0L, arrayManipulationVer2(3,
-				new int[][] { new int[] { 1, 1, 0 } }));
+		assertEquals(0L, arrayManipulationVer2(3, new int[][] { new int[] { 1, 1, 0 } }));
 
 		assertEquals(0L, arrayManipulationVer2(10,
 				new int[][] { new int[] { 1, 1, 0 }, new int[] { 2, 2, 0 }, new int[] { 3, 3, 0 } }));
@@ -276,13 +324,14 @@ public class TwoDimensionalArrayTest {
 
 	@Test
 	void arrayManipulationVer24Test() {
-//test big numbers
+		//test big numbers
 		//Integer.MAX_VALUE = 2147483647
 		assertEquals(12000000000L, arrayManipulationVer2(10000000,
-				new int[][] { new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 },
+				new int[][] { new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 },
 						new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 },
 						new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 },
-						new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 }}));
+						new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 }, new int[] { 1, 1, 1000000000 },
+						new int[] { 1, 1, 1000000000 } }));
 
 	}
 
@@ -293,31 +342,7 @@ public class TwoDimensionalArrayTest {
 				new int[][] { new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 },
 						new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 },
 						new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 },
-						new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 }}));
+						new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 }, new int[] { 1, 10000000, 0 } }));
 
 	}
-
-	private long arrayManipulationVer3(int n, int[][] queries) {
-
-//TODO vylepsit rychlost
-		//max operations mxn = 2*10^5 * 10^7 = 2*10^12  O(n^2)
-		//the worst scenario is the same as the variant 1
-		//the most optimistic scenario is better - 2*10^5 * 2*10^0 (2 items for a and b index) = 4*10^5 , take linear time
-
-		int a = 1;
-		int b = n;
-		long max = 0;
-
-		for (int[] query : queries) {
-
-//			a = query[0];
-//			b = query[1];
-//			add = query[2];
-
-		}
-
-		return max;
-
-	}
-
 }
