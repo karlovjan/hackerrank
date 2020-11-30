@@ -66,6 +66,10 @@ class LinketListTest {
 
 	static void printLinkedList(SinglyLinkedListNode head) {
 
+		if(head == null){
+			return;
+		}
+
 		SinglyLinkedListNode node = head;
 
 		do {
@@ -296,5 +300,49 @@ class LinketListTest {
 		llist.head = deleteNode(llist.head, 0);
 		assertNull(llist.head);
 
+	}
+
+	/*
+	 *https://www.hackerrank.com/challenges/print-the-elements-of-a-linked-list-in-reverse/problem
+	 */
+	SinglyLinkedListNode reverseLinketList(SinglyLinkedListNode head) {
+
+		if(head == null){
+			return null;
+		}
+
+		SinglyLinkedList llist = new SinglyLinkedList();
+		SinglyLinkedListNode nodeTmp = head;
+		llist.head = insertNodeAtHead(llist.head, nodeTmp.data);
+
+		while (nodeTmp.next != null) {
+			llist.head = insertNodeAtHead(llist.head, nodeTmp.next.data);
+			nodeTmp = nodeTmp.next;
+		}
+
+		//return head
+		return llist.head;
+	}
+
+	void reversePrint(SinglyLinkedListNode head) {
+
+		SinglyLinkedListNode revHead = reverseLinketList(head);
+
+		printLinkedList(revHead);
+	}
+
+	@Test
+	void reverseLinketListTest() {
+		SinglyLinkedList llist = new SinglyLinkedList();
+
+		llist.insertNode(9);
+		llist.insertNode(3);
+		llist.insertNode(7);
+
+		SinglyLinkedListNode reversedNodes = reverseLinketList(llist.head);
+
+		assertEquals(7, reversedNodes.data);
+		assertEquals(3, reversedNodes.next.data);
+		assertEquals(9, reversedNodes.next.next.data);
 	}
 }
