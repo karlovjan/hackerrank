@@ -1,7 +1,6 @@
 package datastructures.linketlist;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -66,7 +65,7 @@ class LinketListTest {
 
 	static void printLinkedList(SinglyLinkedListNode head) {
 
-		if(head == null){
+		if (head == null) {
 			return;
 		}
 
@@ -307,7 +306,7 @@ class LinketListTest {
 	 */
 	SinglyLinkedListNode reverseLinketList(SinglyLinkedListNode head) {
 
-		if(head == null){
+		if (head == null) {
 			return null;
 		}
 
@@ -345,4 +344,110 @@ class LinketListTest {
 		assertEquals(3, reversedNodes.next.data);
 		assertEquals(9, reversedNodes.next.next.data);
 	}
+
+	/*
+	Compare two linked lists
+
+	https://www.hackerrank.com/challenges/compare-two-linked-lists/problem
+
+You’re given the pointer to the head nodes of two linked lists.
+Compare the data in the nodes of the linked lists to check if they are equal.
+If all data attributes are equal and the lists are the same length, return 1. Otherwise, return 0.
+	 */
+
+	boolean compareTwoLinketLists(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
+
+		if (head1 == null && head2 == null) {
+			return true;
+		}
+
+		//alespon jedne list je null
+		if (head1 == null || head2 == null) {
+			return false;
+		}
+
+		SinglyLinkedListNode tmpNode1 = head1;
+		SinglyLinkedListNode tmpNode2 = head2;
+
+		while (tmpNode1 != null) {
+
+			if (tmpNode2 == null || tmpNode1.data != tmpNode2.data) {
+				return false;
+			}
+
+			tmpNode1 = tmpNode1.next;
+			tmpNode2 = tmpNode2.next;
+		}
+
+		//pokud projdu vsemi nody tak na konci musi mit oba listy null
+		return tmpNode2 == null;
+	}
+
+	@Test
+	void compareTwoLinketListsTest_null() {
+
+		assertTrue(compareTwoLinketLists(null, null));
+		assertFalse(compareTwoLinketLists(new SinglyLinkedListNode(1), null));
+		assertFalse(compareTwoLinketLists(null, new SinglyLinkedListNode(1)));
+	}
+
+	@Test
+	void compareTwoLinketListsTest_equal() {
+
+		assertTrue(compareTwoLinketLists(new SinglyLinkedListNode(1), new SinglyLinkedListNode(1)));
+
+		SinglyLinkedList llist1 = new SinglyLinkedList();
+
+		llist1.insertNode(9);
+		llist1.insertNode(3);
+		llist1.insertNode(7);
+
+		SinglyLinkedList llist2 = new SinglyLinkedList();
+
+		llist2.insertNode(9);
+		llist2.insertNode(3);
+		llist2.insertNode(7);
+
+		assertTrue(compareTwoLinketLists(llist1.head, llist2.head));
+	}
+
+	@Test
+	void compareTwoLinketListsTest_NotEqual() {
+
+		assertFalse(compareTwoLinketLists(new SinglyLinkedListNode(1), new SinglyLinkedListNode(2)));
+
+		SinglyLinkedList llist1 = new SinglyLinkedList();
+
+		llist1.insertNode(9);
+		llist1.insertNode(3);
+		llist1.insertNode(7);
+
+		SinglyLinkedList llist2 = new SinglyLinkedList();
+
+		llist2.insertNode(9);
+		llist2.insertNode(3);
+		llist2.insertNode(1);
+
+		assertFalse(compareTwoLinketLists(llist1.head, llist2.head));
+	}
+
+	@Test
+	void compareTwoLinketListsTest_DifferentLenght() {
+
+		SinglyLinkedList llist1 = new SinglyLinkedList();
+
+		llist1.insertNode(1);
+		llist1.insertNode(2);
+		llist1.insertNode(7);
+
+		SinglyLinkedList llist2 = new SinglyLinkedList();
+
+		llist2.insertNode(1);
+		llist2.insertNode(2);
+		llist2.insertNode(7);
+		llist2.insertNode(10);
+
+		assertFalse(compareTwoLinketLists(llist1.head, llist2.head));
+	}
+
 }
