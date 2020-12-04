@@ -450,4 +450,115 @@ If all data attributes are equal and the lists are the same length, return 1. Ot
 		assertFalse(compareTwoLinketLists(llist1.head, llist2.head));
 	}
 
+	/*
+	 * For your reference:
+	 * https://www.hackerrank.com/challenges/merge-two-sorted-linked-lists/problem
+	 *
+	 * Given pointers to the heads of two sorted linked lists, merge them into a single, sorted linked list.
+	 * Either head pointer may be null meaning that the corresponding list is empty.
+	 *
+	 * Example:
+	 * headA: 1 -> 3 -> 7 -> null
+	 * headB: 1 -> 2 -> null
+	 *
+	 * result: 1 -> 1 -> 2 -> 3 -> 7 -> null
+	 *
+	 * SinglyLinkedListNode {
+	 *     int data;
+	 *     SinglyLinkedListNode next;
+	 * }
+	 *
+	 */
+	SinglyLinkedListNode mergeAndSortLists(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
+
+		if (head1 == null && head2 == null) {
+			return null;
+		}
+
+		if (head1 == null) {
+			return sortList(head2);
+		}
+
+		if (head2 == null) {
+			return sortList(head1);
+		}
+
+		SinglyLinkedListNode tmpNode = head1;
+		while (tmpNode != null){
+			tmpNode = tmpNode.next;
+		}
+
+		tmpNode = head2;
+
+		return sortList(tmpNode);
+
+	}
+
+	private SinglyLinkedListNode sortList(SinglyLinkedListNode head) {
+
+		if(head == null) {
+			return null;
+		}
+
+		SinglyLinkedListNode sortedHead = new SinglyLinkedListNode(head.data);
+		SinglyLinkedListNode tmpNode = head.next;
+		SinglyLinkedListNode sortedNode = sortedHead;
+
+		while (tmpNode != null) {
+
+
+			while (sortedNode != null) {
+
+				if(tmpNode.data <= sortedNode.data){
+					SinglyLinkedListNode newHead = new SinglyLinkedListNode(tmpNode.data);
+					newHead.next = sortedNode;
+					insertNodeAtHead(sortedNode, tmpNode.data);
+					break;
+				}
+
+				sortedNode = sortedNode.next;
+
+				//pokud nebyl ani jedne mensi pak je tmpNode nejvetsi a patri na konec sortedHead
+				if(sortedNode == null){
+					sortedNode = new SinglyLinkedListNode(tmpNode.data);
+				}
+			}
+
+			tmpNode = tmpNode.next;
+
+		}
+
+		return sortedHead;
+	}
+
+	@Test
+	void mergeAndSortListsTest_null() {
+
+		assertNull(mergeAndSortLists(null, null));
+
+		SinglyLinkedList llist1 = new SinglyLinkedList();
+
+		llist1.insertNode(9);
+		llist1.insertNode(3);
+		llist1.insertNode(7);
+
+		var head = mergeAndSortLists(llist1.head, null);
+		assertEquals(3, head.data);
+		assertEquals(7, head.next.data);
+		assertEquals(9, head.next.next.data);
+		assertNull(head.next.next.next);
+
+		llist1 = new SinglyLinkedList();
+
+		llist1.insertNode(1);
+		llist1.insertNode(4);
+		llist1.insertNode(2);
+
+		head = mergeAndSortLists(null, llist1.head);
+		assertEquals(1, head.data);
+		assertEquals(2, head.next.data);
+		assertEquals(4, head.next.next.data);
+		assertNull(head.next.next.next);
+	}
+
 }
