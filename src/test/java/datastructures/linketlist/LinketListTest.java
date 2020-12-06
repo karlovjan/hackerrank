@@ -17,6 +17,50 @@ class LinketListTest {
      * }
      *
      */
+    static class SinglyLinkedListNode {
+        int data;
+        SinglyLinkedListNode next;
+
+        SinglyLinkedListNode(int nodeData) {
+            this.data = nodeData;
+            this.next = null;
+        }
+    }
+
+    static class SinglyLinkedList {
+        SinglyLinkedListNode head;
+        SinglyLinkedListNode tail;
+        private int size = 0;
+
+        SinglyLinkedList() {
+            this.head = null;
+            this.tail = null;
+        }
+
+        void insertNode(int nodeData) {
+            SinglyLinkedListNode node = new SinglyLinkedListNode(nodeData);
+
+            //na zacatku se nastavi zacatecni node jak do head tak i do tail, tail a head ma stejnou referenci
+            //proto kdyz v druhem kroku a dalsich delam tail.next = node; tak se porad pridava next i v head
+            //1loop > h1=t1=n1
+            //2loop > h1.next=t2.next=n2
+            //3loop > h1.next.next=t3.next=n3
+            if (this.head == null) {
+                this.head = node;
+            } else {
+                this.tail.next = node;
+            }
+
+            this.tail = node;
+
+            ++size;
+        }
+
+        int size() {
+
+            return size;
+        }
+    }
 
     static void printLinkedList(SinglyLinkedListNode head) {
 
@@ -299,6 +343,16 @@ class LinketListTest {
         assertEquals(9, reversedNodes.next.next.data);
     }
 
+
+    /*
+    Compare two linked lists
+
+    https://www.hackerrank.com/challenges/compare-two-linked-lists/problem
+
+You’re given the pointer to the head nodes of two linked lists.
+Compare the data in the nodes of the linked lists to check if they are equal.
+If all data attributes are equal and the lists are the same length, return 1. Otherwise, return 0.
+     */
     boolean compareTwoLinketLists(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
 
         if (head1 == null && head2 == null) {
@@ -334,16 +388,6 @@ class LinketListTest {
         assertFalse(compareTwoLinketLists(new SinglyLinkedListNode(1), null));
         assertFalse(compareTwoLinketLists(null, new SinglyLinkedListNode(1)));
     }
-
-	/*
-	Compare two linked lists
-
-	https://www.hackerrank.com/challenges/compare-two-linked-lists/problem
-
-You’re given the pointer to the head nodes of two linked lists.
-Compare the data in the nodes of the linked lists to check if they are equal.
-If all data attributes are equal and the lists are the same length, return 1. Otherwise, return 0.
-	 */
 
     @Test
     void compareTwoLinketListsTest_equal() {
@@ -718,6 +762,13 @@ If all data attributes are equal and the lists are the same length, return 1. Ot
 
     }
 
+    /*
+    https://www.hackerrank.com/challenges/get-the-value-of-the-node-at-a-specific-position-from-the-tail
+
+    Given a pointer to the head of a linked list and a specific position,
+    determine the data value at that position.
+    Count backwards from the tail node. The tail is at postion 0, its parent is at 1 and so on.
+     */
     int getNodeDataFromTail(SinglyLinkedListNode head, int positionFromTail) {
 
         if (head == null && positionFromTail >= 0) {
@@ -760,56 +811,4 @@ If all data attributes are equal and the lists are the same length, return 1. Ot
 
     }
 
-
-	/*
-	https://www.hackerrank.com/challenges/get-the-value-of-the-node-at-a-specific-position-from-the-tail
-
-	Given a pointer to the head of a linked list and a specific position, determine the data value at that position.
-	Count backwards from the tail node. The tail is at postion 0, its parent is at 1 and so on.
-	 */
-
-    static class SinglyLinkedListNode {
-        int data;
-        SinglyLinkedListNode next;
-
-        SinglyLinkedListNode(int nodeData) {
-            this.data = nodeData;
-            this.next = null;
-        }
-    }
-
-    static class SinglyLinkedList {
-        SinglyLinkedListNode head;
-        SinglyLinkedListNode tail;
-        private int size = 0;
-
-        SinglyLinkedList() {
-            this.head = null;
-            this.tail = null;
-        }
-
-        void insertNode(int nodeData) {
-            SinglyLinkedListNode node = new SinglyLinkedListNode(nodeData);
-
-            //na zacatku se nastavi zacatecni node jak do head tak i do tail, tail a head ma stejnou referenci
-            //proto kdyz v druhem kroku a dalsich delam tail.next = node; tak se porad pridava next i v head
-            //1loop > h1=t1=n1
-            //2loop > h1.next=t2.next=n2
-            //3loop > h1.next.next=t3.next=n3
-            if (this.head == null) {
-                this.head = node;
-            } else {
-                this.tail.next = node;
-            }
-
-            this.tail = node;
-
-            ++size;
-        }
-
-        int size() {
-
-            return size;
-        }
-    }
 }
