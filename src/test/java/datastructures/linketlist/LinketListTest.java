@@ -1,5 +1,7 @@
 package datastructures.linketlist;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -808,6 +810,118 @@ If all data attributes are equal and the lists are the same length, return 1. Ot
         assertEquals(8, getNodeDataFromTail(lList.head, 0));
         assertEquals(3, getNodeDataFromTail(lList.head, 6));
         assertEquals(5, getNodeDataFromTail(lList.head, 3));
+
+    }
+
+    /**
+     * https://www.hackerrank.com/challenges/delete-duplicate-value-nodes-from-a-sorted-linked-list/problem
+     * You are given the pointer to the head node of a sorted linked list,
+     * where the data in the nodes is in ascending order.
+     * Delete nodes and return a sorted list with each distinct value in the original list.
+     * The given head pointer may be null indicating that the list is empty.
+     *
+     * @param head head of the linked list
+     * @return new head without d
+     */
+    private SinglyLinkedListNode removeDuplicates(SinglyLinkedListNode head) {
+
+        if (head == null) {
+            return null;
+        }
+
+        SinglyLinkedList lList = new SinglyLinkedList();
+        lList.insertNode(head.data);
+
+        SinglyLinkedListNode nodeTmp = head.next;
+
+        while (nodeTmp != null) {
+
+            if (lList.tail.data != nodeTmp.data) {
+                lList.insertNode(nodeTmp.data);
+            }
+
+            nodeTmp = nodeTmp.next;
+        }
+
+        return lList.head;
+    }
+
+    @Nested
+    @DisplayName("RemoveDuplicatesTestClass")
+    class RemoveDuplicatesTestClass {
+
+        @Test
+        void removeDuplicatesTest_null() {
+            assertNull(removeDuplicates(null));
+        }
+
+        @Test
+        void removeDuplicatesTest() {
+
+            SinglyLinkedList lList = new SinglyLinkedList();
+            lList.insertNode(1);
+            lList.insertNode(1);
+            lList.insertNode(1);
+            lList.insertNode(1);
+            lList.insertNode(1);
+            lList.insertNode(2);
+            lList.insertNode(2);
+            lList.insertNode(2);
+            lList.insertNode(2);
+            lList.insertNode(2);
+            lList.insertNode(3);
+            lList.insertNode(3);
+            lList.insertNode(3);
+            lList.insertNode(3);
+            lList.insertNode(3);
+            lList.insertNode(4);
+            lList.insertNode(4);
+            lList.insertNode(4);
+            lList.insertNode(4);
+            lList.insertNode(4);
+            lList.insertNode(5);
+            lList.insertNode(5);
+            lList.insertNode(5);
+            lList.insertNode(5);
+            lList.insertNode(5);
+            lList.insertNode(6);
+            lList.insertNode(6);
+            lList.insertNode(6);
+            lList.insertNode(6);
+            lList.insertNode(6);
+            lList.insertNode(6);
+            lList.insertNode(7);
+            lList.insertNode(7);
+            lList.insertNode(7);
+            lList.insertNode(7);
+            lList.insertNode(7);
+            lList.insertNode(8);
+            lList.insertNode(8);
+            lList.insertNode(8);
+            lList.insertNode(8);
+            lList.insertNode(8);
+            lList.insertNode(9);
+            lList.insertNode(9);
+            lList.insertNode(9);
+            lList.insertNode(9);
+            lList.insertNode(9);
+            lList.insertNode(9);
+            lList.insertNode(10);
+            lList.insertNode(10);
+            lList.insertNode(10);
+            lList.insertNode(10);
+            lList.insertNode(10);
+            lList.insertNode(10);
+
+            SinglyLinkedListNode nodeTmp = removeDuplicates(lList.head);
+            int i = 0;
+
+            while (nodeTmp != null) {
+                assertEquals(++i, nodeTmp.data);
+                nodeTmp = nodeTmp.next;
+            }
+        }
+
 
     }
 
