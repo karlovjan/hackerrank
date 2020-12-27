@@ -1093,7 +1093,7 @@ If all data attributes are equal and the lists are the same length, return 1. Ot
     @DisplayName("FindMergeNodeTestClass")
     class FindMergeNodeTestClass {
 
-        int findMergeNode(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
+        private int findMergeNode(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
 
             SinglyLinkedListNode pr1 = head1;
             SinglyLinkedListNode pr2 = head2;
@@ -1253,16 +1253,407 @@ If all data attributes are equal and the lists are the same length, return 1. Ot
 
         int findMergeNode_v1(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
 
-            SinglyLinkedListNode pntr1 = reverseLinketList(head1);
-            SinglyLinkedListNode pntr2 = head2;
+            //12345
+            //1112345
+            SinglyLinkedListNode current1 = head1;
+            SinglyLinkedListNode current2 = head2;
 
+            //Do till the two nodes are the same
+            while(current1 != current2){
+                //If you reached the end of one list start at the beginning of the other one
+                //currentA
+                if(current1.next == null){
+                    current1 = head2;
+                }else{
+                    current1 = current1.next;
+                }
+                //currentB
+                if(current2.next == null){
+                    current2 = head1;
+                }else{
+                    current2 = current2.next;
+                }
+            }
+            return current2.data;
 
-            while (pntr1 == pntr2) {
+        }
 
+    }
+
+    @Nested
+    @DisplayName("FindMergeNode_v1_TestClass")
+    class FindMergeNode_v1_TestClass {
+
+        private int findMergeNode(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
+
+            SinglyLinkedListNode current1 = head1;
+            SinglyLinkedListNode current2 = head2;
+
+            //Do till the two nodes are the same
+            while(current1 != current2){
+                //If you reached the end of one list start at the beginning of the other one
+                //currentA
+                if(current1.next == null){
+                    current1 = head2;
+                } else{
+                    current1 = current1.next;
+                }
+                //currentB
+                if(current2.next == null){
+                    current2 = head1;
+                } else{
+                    current2 = current2.next;
+                }
             }
 
-            return 0;
+            //ListA = 1--2--3--4--5
+//            ListB = 1--1--2--2--3--4--5
+            //A1B1 ne, A2B1 ne, A3B2 ne, A4B2 ne, A5B3 ne, B1B4 ne, B1B5 ne, B2A1 ne, B2A2 Found
+
+            //ListA = 1--2--3--4--5
+//            ListB = 10--4--5
+
+            //a1b10 ne, a2b5 ne, a3b4 ne, a4b4
+
+
+            //ListA = 1--2--3--4--5
+//            ListB = 5
+
+            //a1b5 ne, a2b5 ne, a3b5 ne, a4b5 ne, a5b5
+
+            //ListB = 5
+            //ListA = 1--2--3--4--5
+
+            //a5b1 ne, a5b2 ne, a5b3 ne, a5b4 ne, a5b5
+
+
+            return current2.data;
         }
+
+        @Test
+        void findMergeNodeTest() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+            list1.insertNode(3);
+            list1.insertNode(4);
+            list1.insertNode(10);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+            list2.insertNode(10);
+            list2.insertNode(15);
+            list2.insertNode(20);
+
+            SinglyLinkedListNode pr1 = list1.head;
+            SinglyLinkedListNode pr2 = list2.head;
+
+            int mergeIndex1 = 2;
+            int mergeIndex2 = 1;
+
+            for (int i = 0; i < mergeIndex1; i++) {
+                pr1 = pr1.next;
+            }
+
+            for (int i = 0; i < mergeIndex2; i++) {
+                pr2 = pr2.next;
+            }
+
+            pr2.next = pr1;
+
+            assertEquals(4, findMergeNode(list1.head, list2.head));
+        }
+
+        @Test
+        void findMergeNodeTest2() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+            list1.insertNode(3);
+            list1.insertNode(4);
+            list1.insertNode(10);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+            list2.insertNode(10);
+            list2.insertNode(15);
+            list2.insertNode(20);
+
+            SinglyLinkedListNode pr1 = list1.head;
+            SinglyLinkedListNode pr2 = list2.head;
+
+            int mergeIndex1 = 2;
+            int mergeIndex2 = 3;
+
+            for (int i = 0; i < mergeIndex1; i++) {
+                pr1 = pr1.next;
+            }
+
+            for (int i = 0; i < mergeIndex2; i++) {
+                pr2 = pr2.next;
+            }
+
+            pr2.next = pr1;
+
+            assertEquals(4, findMergeNode(list1.head, list2.head));
+        }
+
+        @Test
+        void findMergeNodeTest3() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+            list1.insertNode(3);
+            list1.insertNode(4);
+            list1.insertNode(10);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+            list2.insertNode(10);
+            list2.insertNode(15);
+            list2.insertNode(20);
+
+            SinglyLinkedListNode pr1 = list1.head;
+            SinglyLinkedListNode pr2 = list2.head;
+
+            int mergeIndex1 = 2;
+
+            for (int i = 0; i < mergeIndex1; i++) {
+                pr1 = pr1.next;
+            }
+
+            pr2.next = pr1;
+
+            assertEquals(4, findMergeNode(list1.head, list2.head));
+        }
+
+        @Test
+        void findMergeNodeTest4() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+
+            list1.head.next = list2.head;
+
+
+            assertEquals(5, findMergeNode(list1.head, list2.head));
+        }
+
+        @Test
+        void findMergeNodeTest5() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+
+            list2.head.next = list1.head;
+
+
+            assertEquals(2, findMergeNode(list1.head, list2.head));
+        }
+
+    }
+    @Nested
+    @DisplayName("FindMergeNode_v2_TestClass")
+    class FindMergeNode_v2_TestClass {
+
+        private int findMergeNode(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
+
+            //12345
+            //1112345
+            SinglyLinkedListNode slow = head1;
+            SinglyLinkedListNode fast = head2;
+
+            while (true) {
+
+                if(slow == null) {
+                    slow = head1;
+                }
+
+                if (fast == null) {
+                    fast = head2;
+                }
+
+                //fast.next == null pokud head2 ma jen jedenu polozzku a next je null
+                if (slow == fast || slow == fast.next || (fast.next == null && slow == head2)) {
+                    return slow.data; //fast node catch up the slow node
+                }
+
+                slow = slow.next;
+                fast = fast.next;
+            }
+        }
+
+        @Test
+        void findMergeNodeTest() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+            list1.insertNode(3);
+            list1.insertNode(4);
+            list1.insertNode(10);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+            list2.insertNode(10);
+            list2.insertNode(15);
+            list2.insertNode(20);
+
+            SinglyLinkedListNode pr1 = list1.head;
+            SinglyLinkedListNode pr2 = list2.head;
+
+            int mergeIndex1 = 3;
+            int mergeIndex2 = 0;
+
+            for (int i = 0; i < mergeIndex1; i++) {
+                pr1 = pr1.next;
+            }
+
+            for (int i = 0; i < mergeIndex2; i++) {
+                pr2 = pr2.next;
+            }
+
+            pr1.next = pr2;
+//            pr2.next = pr1;
+
+            assertEquals(5, findMergeNode(list1.head, list2.head));
+        }
+
+        @Test
+        void findMergeNodeTest11() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+            list1.insertNode(3);
+            list1.insertNode(4);
+            list1.insertNode(10);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+            list2.insertNode(10);
+            list2.insertNode(15);
+            list2.insertNode(20);
+
+            SinglyLinkedListNode pr1 = list1.head;
+            SinglyLinkedListNode pr2 = list2.head;
+
+            int mergeIndex1 = 0;
+            int mergeIndex2 = 3;
+
+            for (int i = 0; i < mergeIndex1; i++) {
+                pr1 = pr1.next;
+            }
+
+            for (int i = 0; i < mergeIndex2; i++) {
+                pr2 = pr2.next;
+            }
+
+            pr2.next = pr1;
+
+            assertEquals(2, findMergeNode(list1.head, list2.head));
+        }
+
+        @Test
+        void findMergeNodeTest2() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+            list1.insertNode(3);
+            list1.insertNode(4);
+            list1.insertNode(10);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+            list2.insertNode(10);
+            list2.insertNode(15);
+            list2.insertNode(20);
+
+            SinglyLinkedListNode pr1 = list1.head;
+            SinglyLinkedListNode pr2 = list2.head;
+
+            int mergeIndex1 = 2;
+            int mergeIndex2 = 3;
+
+            for (int i = 0; i < mergeIndex1; i++) {
+                pr1 = pr1.next;
+            }
+
+            for (int i = 0; i < mergeIndex2; i++) {
+                pr2 = pr2.next;
+            }
+
+            pr2.next = pr1;
+
+            assertEquals(4, findMergeNode(list1.head, list2.head));
+        }
+
+        @Test
+        void findMergeNodeTest3() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+            list1.insertNode(3);
+            list1.insertNode(4);
+            list1.insertNode(10);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+            list2.insertNode(10);
+            list2.insertNode(15);
+            list2.insertNode(20);
+
+            SinglyLinkedListNode pr1 = list1.head;
+            SinglyLinkedListNode pr2 = list2.head;
+
+            int mergeIndex1 = 2;
+
+            for (int i = 0; i < mergeIndex1; i++) {
+                pr1 = pr1.next;
+            }
+
+            pr2.next = pr1;
+
+            //2 3 4 10
+            //5 4 10
+            //
+            assertEquals(4, findMergeNode(list1.head, list2.head));
+        }
+
+        @Test
+        void findMergeNodeTest4() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+
+            list1.head.next = list2.head;
+
+
+            assertEquals(5, findMergeNode(list1.head, list2.head));
+        }
+
+        @Test
+        void findMergeNodeTest5() {
+
+            SinglyLinkedList list1 = new SinglyLinkedList();
+            list1.insertNode(2);
+
+            SinglyLinkedList list2 = new SinglyLinkedList();
+            list2.insertNode(5);
+
+            list2.head.next = list1.head;
+
+
+            assertEquals(2, findMergeNode(list1.head, list2.head));
+        }
+
     }
 
     DoublyLinkedListNode sortedInsert(DoublyLinkedListNode head, int data) {
