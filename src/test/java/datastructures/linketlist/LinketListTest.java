@@ -1881,5 +1881,51 @@ If all data attributes are equal and the lists are the same length, return 1. Ot
 
     }
 
+    DoublyLinkedListNode reverseDoublyLinkedList(DoublyLinkedListNode head) {
 
+        if(head == null){
+            return null;
+        }
+
+        //only one node
+        if(head.next == null) {
+            return head;
+        }
+
+        DoublyLinkedListNode reversed = null;
+
+        DoublyLinkedListNode newNode;
+        DoublyLinkedListNode currentNode = head;
+
+        while (currentNode != null) {
+
+            newNode = new DoublyLinkedListNode(currentNode.data);
+            newNode.next = reversed;
+            newNode.prev = currentNode.next;
+
+            reversed = newNode;
+
+            currentNode = currentNode.next;
+        }
+
+        return reversed;
+    }
+
+    @Test
+    void reverseDoublyLinkedListTest() {
+
+        DoublyLinkedList list1 = new DoublyLinkedList();
+        list1.insertNode(1);
+        list1.insertNode(2);
+        list1.insertNode(3);
+        list1.insertNode(4);
+
+
+        DoublyLinkedListNode reversed = reverseDoublyLinkedList(list1.head);
+
+        assertEquals(4, reversed.data);
+        assertEquals(3, reversed.next.data);
+        assertEquals(2, reversed.next.next.data);
+        assertEquals(1, reversed.next.next.next.data);
+    }
 }
