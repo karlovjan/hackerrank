@@ -161,6 +161,7 @@ Level-Order(breadth-first-search (BFS)): 4 2 6 1 3 5 7
 	void inOrder(Node root, List<Integer> result) {
 		if(root != null) {
 			inOrder(root.left, result);
+
 			if(result == null){
 				result = new ArrayList<>();
 			}
@@ -205,4 +206,31 @@ Level-Order(breadth-first-search (BFS)): 4 2 6 1 3 5 7
 		//aby Node root = generateBST(new int[] { 3, 5, 4, 7, 2, 1, 6 }); root = 4 a 4[2, 6], 2[1,3], 6[5,7]
 	}
 
+	void preOrderTraversing(Node root, List<Integer> result) {
+		if(root != null) {
+			if(result == null){
+				result = new ArrayList<>();
+			}
+			result.add(root.data);
+
+			preOrderTraversing(root.left, result);
+			preOrderTraversing(root.right, result);
+
+		}
+	}
+
+	@Test
+	void preOrderTraversingTest() {
+		List<Integer> result = new ArrayList<>();
+		Node root = generateBST(new int[] { 3, 5, 2, 1, 4 });
+
+		preOrderTraversing(root, result);
+
+		assertIterableEquals(List.of(1, 2, 4, 5, 3), result);
+
+		//System.out.println(result.stream().map(n -> String.valueOf(n)).collect(Collectors.joining(" ")));
+//		result.forEach(n -> System.out.print(n + " "));
+		//TODO prepracovat generateBST tak aby vracela root uprostred tedy aby vysledny strom byl symetricky a ne aby byl u prostredniho nodu left/right null
+		//aby Node root = generateBST(new int[] { 3, 5, 4, 7, 2, 1, 6 }); root = 4 a 4[2, 6], 2[1,3], 6[5,7]
+	}
 }
