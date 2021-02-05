@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 public class UtilTest {
@@ -31,5 +33,137 @@ public class UtilTest {
 
 	public static String intArrayToString(int[] array) {
 		return Arrays.stream(array).mapToObj(String::valueOf).collect(Collectors.joining(",", "[", "]"));
+	}
+
+	/**
+	 * PracticeData Structures->Trees->Tree: Huffman Decoding
+Tree: Huffman Decoding
+	 https://www.hackerrank.com/challenges/tree-huffman-decoding/problem
+	 https://en.wikipedia.org/wiki/Huffman_coding
+	 */
+	@Nested
+	@DisplayName("HuffmanDecodingTestClass")
+	class HuffmanDecodingTestClass {
+
+		abstract class Node implements Comparable<Node> {
+			public  int frequency; // the frequency of this tree
+			public  char data;
+			public  Node left, right;
+			public Node(int freq) {
+				frequency = freq;
+			}
+
+			// compares on the frequency
+			public int compareTo(Node tree) {
+				return frequency - tree.frequency;
+			}
+		}
+
+		class HuffmanLeaf extends Node {
+
+
+			public HuffmanLeaf(int freq, char val) {
+				super(freq);
+				data = val;
+			}
+		}
+
+		class HuffmanNode extends Node {
+
+			public HuffmanNode(Node l, Node r) {
+				super(l.frequency + r.frequency);
+				left = l;
+				right = r;
+			}
+
+		}
+
+
+		class Decoding {
+
+/*
+	class Node
+		public  int frequency; // the frequency of this tree
+    	public  char data;
+    	public  Node left, right;
+
+*/
+
+			String decode(String encodedString, Node root) {
+
+
+				StringBuilder decodedString = new StringBuilder();
+
+				char[] keys = encodedString.toCharArray();
+
+				Node nodeTmp = root;
+
+				for (char edgeValue : keys) {
+
+					// 0 or 1 ?
+					if (edgeValue == '0') {
+						nodeTmp = nodeTmp.left;
+
+					} else {
+						nodeTmp = nodeTmp.right;
+					}
+
+					/*
+					The default value of a char attribute is indeed '\u0000' (the null character)
+					as stated in the Java Language Specification, section §4.12.5 Initial Values of Variables
+					 */
+					if (nodeTmp.data != '\u0000') {
+						//you found the leaf node
+						//stop walking throughout the tree
+						//System.out.print(nodeTmp.data);
+						decodedString.append(nodeTmp.data);
+
+						nodeTmp = root;
+					}
+				}
+
+				return decodedString.toString();
+
+			}
+
+
+
+		}
+
+		@Test
+		void decode_test1() {
+
+			HuffmanLeaf leafC = new HuffmanLeaf(1, 'C');
+			HuffmanLeaf leafD = new HuffmanLeaf(1, 'D');
+
+			HuffmanNode node_fi2 = new HuffmanNode(leafC, leafD);
+			HuffmanLeaf leafB = new HuffmanLeaf(2, 'B');
+			HuffmanNode node_fi4 = new HuffmanNode(node_fi2, leafB);
+
+			HuffmanLeaf leafR = new HuffmanLeaf(2, 'R');
+			HuffmanNode node_fi6 = new HuffmanNode(leafR, node_fi4);
+
+			HuffmanLeaf leafA = new HuffmanLeaf(5, 'A');
+			HuffmanNode node_fi11 = new HuffmanNode(leafA, node_fi6);
+
+			String result = new Decoding().decode("01111001100011010111100", node_fi11);
+			assertEquals("ABRACADABRA", result);
+		}
+
+		@Test
+		void decode_test2() {
+
+			HuffmanLeaf leafB = new HuffmanLeaf(1, 'B');
+			HuffmanLeaf leafC = new HuffmanLeaf(1, 'C');
+
+			HuffmanNode node_fi2 = new HuffmanNode(leafB, leafC);
+
+			HuffmanLeaf leafA = new HuffmanLeaf(3, 'A');
+
+			HuffmanNode node_fi5 = new HuffmanNode(node_fi2, leafA);
+
+			String result = new Decoding().decode("1001011", node_fi5);
+			assertEquals("ABACA", result);
+		}
 	}
 }
