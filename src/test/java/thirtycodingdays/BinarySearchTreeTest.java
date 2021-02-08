@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BinarySearchTreeTest {
 
@@ -403,5 +402,119 @@ The tree as seen from the top the nodes, is called the top view of the tree.
 
         assertIterableEquals(List.of(1, 2, 5, 6), result);
 
+    }
+
+    /*
+        Binary Search Tree : Lowest Common Ancestor
+        https://www.hackerrank.com/challenges/binary-search-tree-lowest-common-ancestor/problem
+        
+        You are given pointer to the root of the binary search tree and two values  and .
+        You need to return the lowest common ancestor (LCA) of  and  in the binary search tree.
+
+        https://en.wikipedia.org/wiki/Lowest_common_ancestor
+
+     */
+
+    Node findLowestCommonAncestor(Node root, int v1, int v2) {
+
+        if(root == null || (v1 == root.data || v2 == root.data) || (v1 < root.data && v2 > root.data) || (v2 < root.data && v1 > root.data)){
+            return root;
+        }
+
+        if(v1 < root.data) {
+            return findLowestCommonAncestor(root.left, v1, v2);
+        }
+
+        return findLowestCommonAncestor(root.right, v1, v2);
+
+    }
+
+    @Test
+    void findLowestCommonAncestorTest1() {
+        Node testBST = generateBST(new int[] {4, 2, 3, 1, 7, 6});
+
+        /*
+
+                 4
+               /   \
+              2     7
+             / \   /
+            1   3 6
+
+         */
+
+        assertEquals(4, findLowestCommonAncestor(testBST, 2, 7).data);
+        assertEquals(4, findLowestCommonAncestor(testBST, 1, 7).data);
+        assertEquals(4, findLowestCommonAncestor(testBST, 3, 6).data);
+        assertEquals(2, findLowestCommonAncestor(testBST, 1, 2).data);
+        //values v1 and v2 are not in the tree
+        assertNull(findLowestCommonAncestor(testBST, 11, 222));
+    }
+
+    @Test
+    void findLowestCommonAncestorTest() {
+        Node testBST = generateBST(new int[] {4, 3, 2, 1, 5, 6, 7});
+
+        /*
+
+                 4
+               /   \
+              3     5
+             /       \
+            2         6
+           /           \
+          1             7
+
+         */
+
+        assertEquals(4, findLowestCommonAncestor(testBST, 1, 4).data);
+        assertEquals(3, findLowestCommonAncestor(testBST, 3, 1).data);
+        assertEquals(5, findLowestCommonAncestor(testBST, 5, 7).data);
+        assertEquals(5, findLowestCommonAncestor(testBST, 7, 5).data);
+    }
+
+    @Test
+    void findLowestCommonAncestorTest2() {
+        Node testBST = generateBST(new int[] {2, 1, 5, 3, 6, 7});
+
+        /*
+                 2
+               /   \
+              1      5
+                   /  \
+                  3    6
+                        \
+                         7
+
+
+
+         */
+
+        assertEquals(5, findLowestCommonAncestor(testBST, 3, 7).data);
+    }
+
+
+    @Test
+    void findLowestCommonAncestorTest3() {
+        Node testBST = generateBST(new int[] {6, 4, 8, 5, 2, 3, 1, 7, 9});
+
+        /*
+                        6
+                      /   \
+                    4       8
+                  /  \     /  \
+                /     5   7    9
+               /
+              2
+             / \
+            1   3
+
+
+         */
+
+        assertEquals(2, findLowestCommonAncestor(testBST, 1, 3).data);
+        assertEquals(4, findLowestCommonAncestor(testBST, 1, 5).data);
+        assertEquals(6, findLowestCommonAncestor(testBST, 1, 9).data);
+        assertEquals(8, findLowestCommonAncestor(testBST, 7, 9).data);
     }
 }
