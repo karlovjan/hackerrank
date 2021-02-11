@@ -517,4 +517,163 @@ The tree as seen from the top the nodes, is called the top view of the tree.
         assertEquals(6, findLowestCommonAncestor(testBST, 1, 9).data);
         assertEquals(8, findLowestCommonAncestor(testBST, 7, 9).data);
     }
+
+    /*
+    Swap Nodes [Algo]
+
+    https://www.hackerrank.com/challenges/swap-nodes-algo/problem
+
+    You are given a tree of n nodes where nodes are indexed from [1..n] and it is rooted at 1.
+    You have to perform t swap operations on it,
+    and after each swap operation print the in-order traversal of the current state of the tree.
+
+
+Given a tree and an integer, k, in one operation, we need to swap the subtrees of all the nodes at each depth h, where h ∈ [k, 2k, 3k,...].
+In other words, if h is a multiple of k, swap the left and right subtrees of that level.
+
+
+Root node is always 1
+
+     */
+
+    /**
+     *
+     * Swapping subtrees of a node means that if initially node has left subtree L and right subtree R, then after swapping,
+     * the left subtree will be R and the right subtree, L.
+     * @param indexes an array of integers representing index values of each <i>node[i]</i>,
+     *                beginning with <i>node[1]</i>, the first element, as the root.
+     *                Note:  -1 is used to represent a null node.
+     *                Maximum rows in indexes is n = {1, 1024},
+     *                each row has 2 columns due to Binary tree
+     * @param queries an array of integers, each representing a <i>k</i> value. 1 <= k <= 1024, Max queries is t = {1, 100}
+     * @return a two-dimensional array where each element is an array of integers representing the node indices of an in-order traversal after a swap operation.
+     */
+    int[][] swapNodes(int[][] indexes, int[] queries) {
+
+        int[][] result = new int[queries.length][indexes.length];
+
+
+        return result;
+    }
+
+    @Test
+    void swapNodes_test_treeDepth1() {
+
+        int[][] indexes = {{-1,-1}};
+        int[] queries = {1}; //k=1 => swap all nodes h {k, 2k,3k,...}
+
+        /*
+                 1     //swap childs of node 1 in depth k
+                / \
+
+         */
+
+
+        int[][] result = swapNodes(indexes, queries);
+
+        assertEquals(1, result.length); // only one swap was made
+        //in-order traversed indices
+        assertArrayEquals(new int[] {1}, result[0]);
+    }
+
+    @Test
+    void swapNodes_test_treeDepth2() {
+
+        int[][] indexes = {{1,2}, {-1,-1}};
+        int[] queries = {1}; //k=1 => swap all nodes h {k, 2k,3k,...}
+
+        /*
+                 1     //swap childs of node 1 in depth k
+                / \
+               2   3   //swap childs of nodes 2 and 3 in depth 2*k
+
+As nodes 2 and 3 have no children, swapping will not have any effect on them. We only have to swap the child nodes of the root node.
+         */
+
+
+        int[][] result = swapNodes(indexes, queries);
+
+        assertEquals(1, result.length); // only one swap was made
+        //in-order traversed indices
+        assertArrayEquals(new int[] {3, 1, 2}, result[0]);
+    }
+
+    @Test
+    void swapNodes_test_treeDepth3() {
+
+        int[][] indexes = {{2,3}, {-1, 4}, {-1, 5}, {-1,-1}, {-1,-1}};
+        int[] queries = {2}; //k=2 => swap all nodes h {k, 2k,3k,...}
+
+        /*
+                 1
+                / \
+               2   3   //swap childs of nodes 2 and 3 in depth h k=2, there is no next swap depth/level h = 2k=2*2=4
+                \   \
+                 4   5
+
+As nodes 2 and 3 have no children, swapping will not have any effect on them. We only have to swap the child nodes of the root node.
+         */
+
+
+        int[][] result = swapNodes(indexes, queries);
+
+        assertEquals(1, result.length); // only one operation
+        //in-order traversed indices
+        assertArrayEquals(new int[] {4,2,1,5,3}, result[0]);
+    }
+
+    @Test
+    void swapNodes_test_treeDepth3_swapEachLevel() {
+
+        int[][] indexes = {{2,-1}, {4,-1}, {-1,-1}};
+        int[] queries = {1}; //k=1 => swap all nodes h {k, 2k,3k,...}
+
+        /*
+                 1    //swap childs of node 1 in depth k=1
+                /
+               2      //swap childs of nodes 2 in depth h=2*k=2
+              /
+             4        //swap childs of nodes 4 in depth h=3*k=3, No childs
+
+         */
+
+
+        int[][] result = swapNodes(indexes, queries);
+
+        assertEquals(1, result.length); // only one operation
+        //in-order traversed indices
+        assertArrayEquals(new int[] {1,2,4}, result[0]);
+    }
+
+
+    @Test
+    void swapNodes_test_treeDepth5_2Queries() {
+
+        //11 nodes in BT
+        int[][] indexes = {{2,3}, {4, -1}, {5, -1}, {6,-1}, {7,8}, {-1,9}, {-1,-1}, {10, 11}, {-1,-1}, {-1,-1}, {-1,-1}};
+        int[] queries = {2, 4}; //k=2 => swap all nodes h {k, 2k,3k,...}
+
+        /*
+                 1
+                / \
+               2   3   //swap childs of nodes 2 and 3 in depth h k=2, there is no next swap depth/level h = 2k=2*2=4
+              /    /
+             4    5
+            /    /  \
+           6    7    8
+           \        / \
+            9      10  11
+
+            Here we perform swap operations at the nodes whose depth is either 2 or 4 for K = 2 and then at nodes whose depth is 4 for K = 4
+         */
+
+
+        int[][] result = swapNodes(indexes, queries);
+
+        assertEquals(2, result.length); // two operations
+        //in-order traversed indices
+        assertArrayEquals(new int[] {2, 9, 6, 4, 1, 3, 7, 5, 11, 8, 10}, result[0]);
+        assertArrayEquals(new int[] {2, 6, 9, 4, 1, 3, 7, 5, 10, 8, 11}, result[1]);
+    }
+
 }
