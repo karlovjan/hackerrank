@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,6 +78,48 @@ A traversal of some binary tree, t, is an algorithm that iterates through each n
 
         return root;
     }
+
+	/**
+	 *
+	 * @param data -1 is null node
+	 * @return
+	 */
+	private Node generateBST(int rootData, int[][] data) {
+
+		Node root = new Node(rootData);
+
+		if(data == null) {
+		    return root;
+        }
+
+		int a,b;
+		Queue<Node> levelNodes = new LinkedList<>();
+		levelNodes.add(root);
+
+		for (int[] childs : data) {
+
+		    Node curNode = levelNodes.poll();
+
+			a = childs[0];
+			b = childs[1];
+
+			if(a != -1){
+			    Node leftNode = new Node(a);
+			    curNode.left = leftNode;
+
+			    levelNodes.add(leftNode);
+            }
+
+			if(b != -1){
+                Node rightNode = new Node(b);
+                curNode.right = rightNode;
+
+                levelNodes.add(rightNode);
+            }
+		}
+
+		return root;
+	}
 
     @Test
     void getHeightBST_rootNull() {
@@ -550,10 +595,35 @@ Root node is always 1
      */
     int[][] swapNodes(int[][] indexes, int[] queries) {
 
-        int[][] result = new int[queries.length][indexes.length];
+    	int nodeCount = indexes.length;
 
+        int[][] result = new int[queries.length][nodeCount];
+
+        Node root = generateBST(1, indexes);
+
+        for(int i = 0; i < queries.length; i++){
+
+
+            Node swapedBST = swapNodesEveryLevel(root, queries[i]);
+
+            List<Integer> inOrderTraversedNodeValues = new ArrayList<>();
+            inOrder(swapedBST, inOrderTraversedNodeValues);
+
+            result[i] = inOrderTraversedNodeValues.stream().mapToInt(Integer::intValue).toArray();
+        }
 
         return result;
+    }
+
+    /**
+     *
+     * @param root root node of BST
+     * @param levelFactor swap is make in every level by the equation level * levelFactor
+     * @return swaped BST root node
+     */
+    private Node swapNodesEveryLevel(Node root, int levelFactor) {
+
+        return null;
     }
 
     @Test
@@ -579,7 +649,7 @@ Root node is always 1
     @Test
     void swapNodes_test_treeDepth2() {
 
-        int[][] indexes = {{1,2}, {-1,-1}};
+        int[][] indexes = {{2,3}, {-1,-1}, {-1,-1}};
         int[] queries = {1}; //k=1 => swap all nodes h {k, 2k,3k,...}
 
         /*
