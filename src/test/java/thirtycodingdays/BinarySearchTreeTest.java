@@ -283,6 +283,19 @@ Level-Order(breadth-first-search (BFS)): 4 2 6 1 3 5 7
 The tree as seen from the top the nodes, is called the top view of the tree.
 	 */
 
+
+    class TopViewNode {
+        int hd;
+        int level;
+        Node node;
+
+        public TopViewNode(int hd, int level, Node node) {
+            this.hd = hd;
+            this.level = level;
+            this.node = node;
+        }
+    }
+
     public List<Integer> getTopView(Node root) {
 
         if (root == null) {
@@ -292,17 +305,6 @@ The tree as seen from the top the nodes, is called the top view of the tree.
 
         List<Integer> result = new ArrayList<>();
 
-        class TopViewNode {
-            int hd;
-            int level;
-            Node node;
-
-            public TopViewNode(int hd, int level, Node node) {
-                this.hd = hd;
-                this.level = level;
-                this.node = node;
-            }
-        }
 
         Queue<TopViewNode> queue = new LinkedList<>();
         Map<Integer, Node> resultHashMap = new HashMap<>();
@@ -604,10 +606,10 @@ Root node is always 1
         for(int i = 0; i < queries.length; i++){
 
 
-            Node swapedBST = swapNodesEveryLevel(root, queries[i]);
+            swapNodesEveryLevel(root, queries[i]);
 
             List<Integer> inOrderTraversedNodeValues = new ArrayList<>();
-            inOrder(swapedBST, inOrderTraversedNodeValues);
+            inOrder(root, inOrderTraversedNodeValues);
 
             result[i] = inOrderTraversedNodeValues.stream().mapToInt(Integer::intValue).toArray();
         }
@@ -619,11 +621,35 @@ Root node is always 1
      *
      * @param root root node of BST
      * @param levelFactor swap is make in every level by the equation level * levelFactor
-     * @return swaped BST root node
      */
-    private Node swapNodesEveryLevel(Node root, int levelFactor) {
+    private void swapNodesEveryLevel(Node root, int levelFactor) {
 
-        return null;
+        Queue<TopViewNode> queue = new LinkedList<>();
+        // enqueue current root
+        queue.add(new TopViewNode(0, 1, root));
+
+        // while there are nodes to process
+        while (!queue.isEmpty()) {
+            // dequeue next node
+            TopViewNode tree = queue.poll();
+
+            final int level = tree.level + 1;
+
+            //will do swapping childs
+            if(tree.level % levelFactor == 0) {
+                Node leftNode = tree.node.left;
+                tree.node.left = tree.node.right;
+                tree.node.right = leftNode;
+            }
+            // enqueue child elements from next level in order
+            if (tree.node.left != null) {
+                queue.add(new TopViewNode(tree.hd - 1, level, tree.node.left));
+            }
+            if (tree.node.right != null) {
+                queue.add(new TopViewNode(tree.hd + 1, level, tree.node.right));
+            }
+        }
+
     }
 
     @Test
