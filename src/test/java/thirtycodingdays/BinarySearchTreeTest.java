@@ -1,5 +1,6 @@
 package thirtycodingdays;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -772,4 +773,204 @@ As nodes 2 and 3 have no children, swapping will not have any effect on them. We
         assertArrayEquals(new int[] {2, 6, 9, 4, 1, 3, 7, 5, 10, 8, 11}, result[1]);
     }
 
+
+    /*
+    Is This a Binary Search Tree?
+
+        https://www.hackerrank.com/challenges/is-binary-search-tree/problem
+
+        For the purposes of this challenge, we define a binary tree to be a binary search tree with the following ordering requirements:
+
+The data value of every node in a node's left subtree is less than the data value of that node.
+The data value of every node in a node's right subtree is greater than the data value of that node.
+
+https://en.wikipedia.org/wiki/Binary_search_tree
+
+     */
+    boolean isBST_levelOrderCheck(Node root) {
+
+        Queue<Node> nodeQueue = new LinkedList<>();
+        nodeQueue.add(root);
+
+        while (!nodeQueue.isEmpty()){
+
+            Node curentNode = nodeQueue.poll();
+
+            if(curentNode.left != null){
+
+                if(curentNode.left.data > curentNode.data){
+                    return false;
+                }
+
+                nodeQueue.add(curentNode.left);
+
+
+            }
+
+            if(curentNode.right != null){
+                if(curentNode.right.data < curentNode.data){
+                    return false;
+                }
+
+                nodeQueue.add(curentNode.right);
+            }
+
+        }
+
+        return true;
+    }
+
+    boolean isBST_inOrderCheck(Node root) {
+
+        if (root != null) {
+            boolean result = isBST_inOrderCheck(root.left);
+
+            if(!result){
+                return false;
+            }
+
+            result = root.left == null || root.left.data < root.data;
+
+            if(!result){
+                return false;
+            }
+
+            result = isBST_inOrderCheck(root.right);
+
+            if(!result){
+                return false;
+            }
+
+            result = root.right == null || root.right.data > root.data;
+
+            if(!result){
+                return false;
+            }
+
+            return true;
+        }
+
+        return true;
+    }
+
+    @Nested
+    class IsBSTTest {
+
+        @Test
+        void isBSTTest1_levelOrderCheck() {
+
+            /*
+                    3
+                   /  \
+                  5    2
+                 / \    /
+                1   4   6
+
+             */
+            int[][] indexes = { { 5, 2 }, { 1, 4 }, { 6, -1 } };
+
+            Node root = generateBST(3, indexes);
+
+            assertFalse(isBST_levelOrderCheck(root));
+        }
+
+        @Test
+        void isBSTTest11_levelOrderCheck() {
+
+            /*
+                    3
+                   /  \
+                  2    5
+                 / \    \
+                1   4    6
+
+             */
+            int[][] indexes = { { 5, 2 }, { 1, 4 }, { -1, 6 }, { -1, -1 }, { -1, -1 }, { -1, -1 } };
+
+            Node root = generateBST(3, indexes);
+
+            assertFalse(isBST_inOrderCheck(root));
+        }
+
+        @Test
+        void isBSTTest2_levelOrderCheck() {
+
+            int[][] indexes = { { 2, 3 }, { 4, -1 }, { 5, -1 }, { 6, -1 }, { 7, 8 }, { -1, 9 }, { -1, -1 }, { 10, 11 },
+                    { -1, -1 }, { -1, -1 }, { -1, -1 } };
+
+            Node root = generateBST(1, indexes);
+
+            assertFalse(isBST_levelOrderCheck(root));
+        }
+
+        @Test
+        void isBSTTest3_levelOrderCheck() {
+
+            /*
+                     20
+                    /  \
+                  10    30
+                       /  \
+                      5    40
+
+             */
+            int[][] indexes = { { 10, 30 }, { -1, -1 }, { 5, 40 }, { -1, -1 }, { -1, -1 } };
+
+            Node root = generateBST(20, indexes);
+
+            assertFalse(isBST_levelOrderCheck(root));
+        }
+
+
+
+        @Test
+        void isBSTTest2_inOrderCheck() {
+
+
+            /*
+                    3
+                   /  \
+                  2    5
+                 / \    \
+                1   4    6
+
+             */
+
+            int[][] indexes = { { 5, 2 }, { 1, 4 }, { -1, 6 }, { -1, -1 }, { -1, -1 }, { -1, -1 } };
+
+            Node root = generateBST(3, indexes);
+
+            assertFalse(isBST_inOrderCheck(root));
+        }
+
+        @Test
+        void isBSTTest1_inOrderCheck() {
+
+            int[][] indexes = { { 2, 3 }, { 4, -1 }, { 5, -1 }, { 6, -1 }, { 7, 8 }, { -1, 9 }, { -1, -1 }, { 10, 11 },
+                    { -1, -1 }, { -1, -1 }, { -1, -1 } };
+
+            Node root = generateBST(1, indexes);
+
+            assertFalse(isBST_inOrderCheck(root));
+        }
+
+
+        @Test
+        void isBSTTest3_inOrderCheck() {
+
+            /*
+                     20
+                    /  \
+                  10    30
+                       /  \
+                      5    40
+
+             */
+            int[][] indexes = { { 10, 30 }, { -1, -1 }, { 5, 40 }, { -1, -1 }, { -1, -1 } };
+
+            Node root = generateBST(20, indexes);
+
+            assertFalse(isBST_levelOrderCheck(root));
+        }
+    }
 }
