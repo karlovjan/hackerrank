@@ -786,68 +786,71 @@ The data value of every node in a node's right subtree is greater than the data 
 
 https://en.wikipedia.org/wiki/Binary_search_tree
 
+
+Test na Hackerranku jde spustit jen v pro Javu7 a bez uzavreni do tridy Solution, jen implementace te metody
+
      */
     boolean isBST_levelOrderCheck(Node root) {
 
-        Queue<Node> nodeQueue = new LinkedList<>();
-        nodeQueue.add(root);
-
-        while (!nodeQueue.isEmpty()){
-
-            Node curentNode = nodeQueue.poll();
-
-            if(curentNode.left != null){
-
-                if(curentNode.left.data > curentNode.data){
-                    return false;
-                }
-
-                nodeQueue.add(curentNode.left);
-
-
-            }
-
-            if(curentNode.right != null){
-                if(curentNode.right.data < curentNode.data){
-                    return false;
-                }
-
-                nodeQueue.add(curentNode.right);
-            }
-
+        if (root == null){
+            return true;
         }
 
-        return true;
+        return isBST_levelOrderCheck(root, 0, Integer.MAX_VALUE);
+
     }
 
+    private boolean isBST_levelOrderCheck(Node root, int min, int max) {
+        if (root == null){
+            return true;
+        }
+
+        //jen rozdilne nody musi byt, nesmi byt stejny jako predesly
+        if (root.data <= min || root.data >= max) {
+            return false;
+        }
+
+        return isBST_levelOrderCheck(root.left, min, root.data) && isBST_levelOrderCheck(root.right, root.data, max);
+
+    }
+
+    /**
+     * an in-order traversal of a binary search tree returns the nodes sorted. Thus we only need to keep the last visited node while traversing the tree
+     * and check whether its key is smaller (or smaller/equal, if duplicates are to be allowed in the tree) compared to the current key.
+     * @param root
+     * @return
+     */
     boolean isBST_inOrderCheck(Node root) {
 
-        if (root != null) {
-            boolean result = isBST_inOrderCheck(root.left);
+        return isBST_inOrderCheck(root, new int[] {-1});
+    }
+
+    private boolean isBST_inOrderCheck(Node root, int[] previousValues) {
+
+
+        if(root != null) {
+
+            boolean result = isBST_inOrderCheck(root.left, previousValues);
 
             if(!result){
                 return false;
             }
 
-            result = root.left == null || root.left.data < root.data;
+//            int newPreviousValue = root.data;
+
+            if(previousValues.length != 0 && root.data <= previousValues[0]) {
+                return false;
+            }
+
+
+            previousValues[0] = root.data;
+
+            result = isBST_inOrderCheck(root.right, previousValues);
 
             if(!result){
                 return false;
             }
 
-            result = isBST_inOrderCheck(root.right);
-
-            if(!result){
-                return false;
-            }
-
-            result = root.right == null || root.right.data > root.data;
-
-            if(!result){
-                return false;
-            }
-
-            return true;
         }
 
         return true;
@@ -857,17 +860,50 @@ https://en.wikipedia.org/wiki/Binary_search_tree
     class IsBSTTest {
 
         @Test
-        void isBSTTest1_levelOrderCheck() {
+        void isBSTTest_levelOrderCheck_true() {
+
+            /*
+                    3
+                   /  \
+                  2    5
+
+             */
+            int[][] indexes = { { 2, 5 }, { -1, -1 }, { -1, -1 }  };
+
+            Node root = generateBST(3, indexes);
+
+            assertTrue(isBST_levelOrderCheck(root));
+        }
+
+
+        @Test
+        void isBSTTest0_levelOrderCheck() {
 
             /*
                     3
                    /  \
                   5    2
-                 / \    /
-                1   4   6
 
              */
-            int[][] indexes = { { 5, 2 }, { 1, 4 }, { 6, -1 } };
+            int[][] indexes = { { 5, 2 }, { -1, -1 }, { -1, -1 }  };
+
+            Node root = generateBST(3, indexes);
+
+            assertFalse(isBST_levelOrderCheck(root));
+        }
+
+        @Test
+        void isBSTTest1_levelOrderCheck() {
+
+            /*
+                    3
+                   /  \
+                  2    5
+                 / \    \
+                1   4    6
+
+             */
+            int[][] indexes = { { 2, 5 }, { 1, 4 }, { -1, 6 }, { -1, -1 }, { -1, -1 }, { -1, -1 }  };
 
             Node root = generateBST(3, indexes);
 
@@ -881,15 +917,17 @@ https://en.wikipedia.org/wiki/Binary_search_tree
                     3
                    /  \
                   2    5
-                 / \    \
-                1   4    6
+                       / \
+                       1  6
+
+
 
              */
-            int[][] indexes = { { 5, 2 }, { 1, 4 }, { -1, 6 }, { -1, -1 }, { -1, -1 }, { -1, -1 } };
+            int[][] indexes = { { 2, 5 }, { -1, -1 }, {1, 6}, { -1, -1 }, { -1, -1 } };
 
             Node root = generateBST(3, indexes);
 
-            assertFalse(isBST_inOrderCheck(root));
+            assertFalse(isBST_levelOrderCheck(root));
         }
 
         @Test
@@ -924,6 +962,40 @@ https://en.wikipedia.org/wiki/Binary_search_tree
 
 
         @Test
+        void isBSTTest0_inOrderCheck_true() {
+
+            /*
+                    3
+                   /  \
+                  2    5
+
+             */
+            int[][] indexes = { { 2, 5 }, { -1, -1 }, { -1, -1 }  };
+
+            Node root = generateBST(3, indexes);
+
+            assertTrue(isBST_inOrderCheck(root));
+        }
+
+
+        @Test
+        void isBSTTest01_inOrderCheck() {
+
+            /*
+                    3
+                   /  \
+                  5    2
+
+             */
+            int[][] indexes = { { 5, 2 }, { -1, -1 }, { -1, -1 }  };
+
+            Node root = generateBST(3, indexes);
+
+            assertFalse(isBST_inOrderCheck(root));
+        }
+
+
+        @Test
         void isBSTTest2_inOrderCheck() {
 
 
@@ -936,7 +1008,7 @@ https://en.wikipedia.org/wiki/Binary_search_tree
 
              */
 
-            int[][] indexes = { { 5, 2 }, { 1, 4 }, { -1, 6 }, { -1, -1 }, { -1, -1 }, { -1, -1 } };
+            int[][] indexes = { { 2, 5 }, { 1, 4 }, { -1, 6 }, { -1, -1 }, { -1, -1 }, { -1, -1 } };
 
             Node root = generateBST(3, indexes);
 
@@ -970,7 +1042,7 @@ https://en.wikipedia.org/wiki/Binary_search_tree
 
             Node root = generateBST(20, indexes);
 
-            assertFalse(isBST_levelOrderCheck(root));
+            assertFalse(isBST_inOrderCheck(root));
         }
     }
 }
