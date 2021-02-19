@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,17 +25,15 @@ class FilterBooleanTest {
 
 		assertThrows(NullPointerException.class, () -> List
 				.of(new BooleanValue(Boolean.TRUE), new BooleanValue(Boolean.FALSE), new BooleanValue(null),
-						new BooleanValue(Boolean.TRUE)).stream().filter(BooleanValue::getBlock)
-				.count());
+						new BooleanValue(Boolean.TRUE)).stream().filter(BooleanValue::getBlock).count());
 
 	}
 
 	@Test
 	void okTest() {
 
-		assertEquals(2, List
-				.of(new BooleanValue(Boolean.TRUE), new BooleanValue(Boolean.FALSE), new BooleanValue(Boolean.FALSE),
-						new BooleanValue(Boolean.TRUE)).stream().filter(BooleanValue::getBlock)
+		assertEquals(2, List.of(new BooleanValue(Boolean.TRUE), new BooleanValue(Boolean.FALSE),
+				new BooleanValue(Boolean.FALSE), new BooleanValue(Boolean.TRUE)).stream().filter(BooleanValue::getBlock)
 				.count());
 
 	}
