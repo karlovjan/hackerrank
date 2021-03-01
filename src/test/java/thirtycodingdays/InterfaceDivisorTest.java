@@ -1,13 +1,12 @@
 package thirtycodingdays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InterfaceDivisorTest {
 
@@ -160,22 +159,34 @@ These numbers are referred to as being between the two arrays. Determine how man
 
 	private int numberBetweenSetsCount(List<Integer> a, List<Integer> b) {
 
-		int aMax = a.stream().mapToInt(Integer::intValue).max().orElse(1);
-		int bMin = b.stream().mapToInt(Integer::intValue).min().orElse(1);
+//		int aMax = a.stream().mapToInt(Integer::intValue).max().orElse(1);
+//		pole jsou serazeny od nejmensiho po nejvetsi
+		int aMax = a.get(a.size() - 1);
+		int bMin = b.get(0);
 
 
 		//start from primary number
 //		for Java 9
-		return (int) Stream.iterate(aMax, n -> n <= bMin ,i -> ((i / aMax) + 1) * aMax).limit(100).filter(n -> b.stream().allMatch(bb -> bb % n == 0)).count();
+		return (int) Stream.iterate(aMax, n -> n <= bMin ,i -> ((i / aMax) + 1) * aMax).limit(100).filter(n -> a.stream().allMatch(aa -> n % aa == 0) && b.stream().allMatch(bb -> bb % n == 0)).count();
 //		for Java 8
 		/*
+		Stream.Builder<Integer> builder = Stream.builder();
+
+		int i = 1;
+		int result;
+		while ((result = i++ * aMax) <= bMin) {
+			builder.accept(result);
+		}
+		return (int) builder.build().filter(n -> a.stream().allMatch(aa -> n % aa == 0) && b.stream().allMatch(bb -> bb % n == 0)).count();
+*/
+				/*
 		List<Integer> allNumbers = new ArrayList<>();
 
-		for (int i = 1, result = aMax; result < bMax; i++) {
+		for (int i = 1, result = aMax; result <= bMin; i++) {
 
 			result = i * aMax;
 
-			if(result < bMax) {
+			if(result <= bMin) {
 				allNumbers.add(result);
 			}
 		}
@@ -192,6 +203,14 @@ These numbers are referred to as being between the two arrays. Determine how man
 
 			}
 
+			for (Integer aArrValue : a) {
+				if (number % aArrValue != 0){
+					found = false;
+					break;
+				}
+
+			}
+
 			if(found) {
 				resultNumbers.add(number);
 			}
@@ -199,7 +218,9 @@ These numbers are referred to as being between the two arrays. Determine how man
 
 		return resultNumbers.size();
 
-		 */
+
+				 */
+
 	}
 
 	@Test
@@ -208,10 +229,15 @@ These numbers are referred to as being between the two arrays. Determine how man
 		assertEquals(2, numberBetweenSetsCount(List.of(2, 6), List.of(24, 36)));
 		assertEquals(3, numberBetweenSetsCount(List.of(2, 4), List.of(16, 32, 96)));
 		assertEquals(2, numberBetweenSetsCount(List.of(3, 4), List.of(24, 48)));
-		assertEquals(0, numberBetweenSetsCount(List.of(1), List.of(1)));
-		assertEquals(8, numberBetweenSetsCount(List.of(1), List.of(100)));
+		assertEquals(0, numberBetweenSetsCount(List.of(2, 7), List.of(15, 19, 21)));
+		assertEquals(1, numberBetweenSetsCount(List.of(1), List.of(1)));
+		assertEquals(9, numberBetweenSetsCount(List.of(1), List.of(100)));
+		assertEquals(1, numberBetweenSetsCount(List.of(1), List.of(1, 100)));
 		assertEquals(0, numberBetweenSetsCount(List.of(100), List.of(1)));
-		assertEquals(0, numberBetweenSetsCount(List.of(100), List.of(100)));
+		assertEquals(0, numberBetweenSetsCount(List.of(1, 100), List.of(1)));
+		assertEquals(1, numberBetweenSetsCount(List.of(1, 100), List.of(100)));
+		assertEquals(0, numberBetweenSetsCount(List.of(1, 100), List.of(1, 100)));
+		assertEquals(1, numberBetweenSetsCount(List.of(100), List.of(100)));
 	}
 
 }
