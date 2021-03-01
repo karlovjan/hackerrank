@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -140,4 +141,77 @@ Prvociselny rozklad cisla: 126
 		assertEquals(15, calculator.divisorSumStream(8));
 		assertEquals(31, calculator.divisorSumStream(16)); //D(16)={1;2;4;8;16}
 	}
+
+
+	/*
+	https://www.hackerrank.com/challenges/between-two-sets/problem
+
+	Between Two Sets
+
+
+There will be two arrays of integers. Determine all integers that satisfy the following two conditions:
+
+1. The elements of the first array are all factors of the integer being considered
+1. The integer being considered is a factor of all elements of the second array
+
+These numbers are referred to as being between the two arrays. Determine how many such numbers exist.
+
+	 */
+
+	private int numberBetweenSetsCount(List<Integer> a, List<Integer> b) {
+
+		int aMax = a.stream().mapToInt(Integer::intValue).max().orElse(1);
+		int bMin = b.stream().mapToInt(Integer::intValue).min().orElse(1);
+
+
+		//start from primary number
+//		for Java 9
+		return (int) Stream.iterate(aMax, n -> n <= bMin ,i -> ((i / aMax) + 1) * aMax).limit(100).filter(n -> b.stream().allMatch(bb -> bb % n == 0)).count();
+//		for Java 8
+		/*
+		List<Integer> allNumbers = new ArrayList<>();
+
+		for (int i = 1, result = aMax; result < bMax; i++) {
+
+			result = i * aMax;
+
+			if(result < bMax) {
+				allNumbers.add(result);
+			}
+		}
+
+		List<Integer> resultNumbers = new ArrayList<>();
+		boolean found;
+		for (Integer number : allNumbers) {
+			found = true;
+			for (Integer bArrValue : b) {
+				if (bArrValue % number != 0){
+					found = false;
+					break;
+				}
+
+			}
+
+			if(found) {
+				resultNumbers.add(number);
+			}
+		}
+
+		return resultNumbers.size();
+
+		 */
+	}
+
+	@Test
+	void numberBetweenSetsCountTest() {
+
+		assertEquals(2, numberBetweenSetsCount(List.of(2, 6), List.of(24, 36)));
+		assertEquals(3, numberBetweenSetsCount(List.of(2, 4), List.of(16, 32, 96)));
+		assertEquals(2, numberBetweenSetsCount(List.of(3, 4), List.of(24, 48)));
+		assertEquals(0, numberBetweenSetsCount(List.of(1), List.of(1)));
+		assertEquals(8, numberBetweenSetsCount(List.of(1), List.of(100)));
+		assertEquals(0, numberBetweenSetsCount(List.of(100), List.of(1)));
+		assertEquals(0, numberBetweenSetsCount(List.of(100), List.of(100)));
+	}
+
 }
