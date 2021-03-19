@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -40,18 +39,19 @@ public class UtilTest {
 
 	/**
 	 * PracticeData Structures->Trees->Tree: Huffman Decoding
-Tree: Huffman Decoding
-	 https://www.hackerrank.com/challenges/tree-huffman-decoding/problem
-	 https://en.wikipedia.org/wiki/Huffman_coding
+	 * Tree: Huffman Decoding
+	 * https://www.hackerrank.com/challenges/tree-huffman-decoding/problem
+	 * https://en.wikipedia.org/wiki/Huffman_coding
 	 */
 	@Nested
 	@DisplayName("HuffmanDecodingTestClass")
 	class HuffmanDecodingTestClass {
 
 		abstract class Node implements Comparable<Node> {
-			public  int frequency; // the frequency of this tree
-			public  char data;
-			public  Node left, right;
+			public int frequency; // the frequency of this tree
+			public char data;
+			public Node left, right;
+
 			public Node(int freq) {
 				frequency = freq;
 			}
@@ -63,7 +63,6 @@ Tree: Huffman Decoding
 		}
 
 		class HuffmanLeaf extends Node {
-
 
 			public HuffmanLeaf(int freq, char val) {
 				super(freq);
@@ -81,7 +80,6 @@ Tree: Huffman Decoding
 
 		}
 
-
 		class Decoding {
 
 /*
@@ -93,7 +91,6 @@ Tree: Huffman Decoding
 */
 
 			String decode(String encodedString, Node root) {
-
 
 				StringBuilder decodedString = new StringBuilder();
 
@@ -128,8 +125,6 @@ Tree: Huffman Decoding
 				return decodedString.toString();
 
 			}
-
-
 
 		}
 
@@ -172,21 +167,33 @@ Tree: Huffman Decoding
 
 	@Test
 	void generateNumbersTest() {
-		assertIterableEquals(List.of(0,1,2,3,4,5,6,7,8,9,10), StreamUtil.generateNumbersJava8(0, 10, 1, 1).collect(Collectors.toUnmodifiableList()));
-		assertIterableEquals(List.of(0,1,2,3,4,5,6,7,8,9,10), StreamUtil.generateNumbersJava9(0, 10, 1, 1).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+				StreamUtil.generateNumbersJava8(0, 10, 1, 1).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+				StreamUtil.generateNumbersJava9(0, 10, 1, 1).collect(Collectors.toUnmodifiableList()));
 
-		assertIterableEquals(List.of(10,20,30), StreamUtil.generateNumbersJava8(10, 30, 10, 1).collect(Collectors.toUnmodifiableList()));
-		assertIterableEquals(List.of(10,20,30), StreamUtil.generateNumbersJava8(1, 30, 1, 10).collect(Collectors.toUnmodifiableList()));
-		assertIterableEquals(List.of(10,20,30), StreamUtil.generateNumbersJava9(10, 30, 1, 10).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(10, 20, 30),
+				StreamUtil.generateNumbersJava8(10, 30, 10, 1).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(10, 20, 30),
+				StreamUtil.generateNumbersJava8(1, 30, 1, 10).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(10, 20, 30),
+				StreamUtil.generateNumbersJava9(10, 30, 1, 10).collect(Collectors.toUnmodifiableList()));
 
-		assertIterableEquals(List.of(10,30,50), StreamUtil.generateNumbersJava8(10, 50, 20, 1).collect(Collectors.toUnmodifiableList()));
-		assertIterableEquals(List.of(10,30,50), StreamUtil.generateNumbersJava9(10, 50, 2, 10).collect(Collectors.toUnmodifiableList()));
-		assertIterableEquals(List.of(10,30,50), StreamUtil.generateNumbersJava9(10, 50, 20, 1).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(10, 30, 50),
+				StreamUtil.generateNumbersJava8(10, 50, 20, 1).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(10, 30, 50),
+				StreamUtil.generateNumbersJava9(10, 50, 2, 10).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(10, 30, 50),
+				StreamUtil.generateNumbersJava9(10, 50, 20, 1).collect(Collectors.toUnmodifiableList()));
 
-		assertIterableEquals(List.of(0), StreamUtil.generateNumbersJava8(0, 0, 1, 1).collect(Collectors.toUnmodifiableList()));
-		assertIterableEquals(List.of(1), StreamUtil.generateNumbersJava8(1, 1, 1, 1).collect(Collectors.toUnmodifiableList()));
-		assertIterableEquals(List.of(0), StreamUtil.generateNumbersJava9(0, 0, 1, 1).collect(Collectors.toUnmodifiableList()));
-		assertIterableEquals(List.of(1), StreamUtil.generateNumbersJava9(1, 1, 1, 1).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(0),
+				StreamUtil.generateNumbersJava8(0, 0, 1, 1).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(1),
+				StreamUtil.generateNumbersJava8(1, 1, 1, 1).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(0),
+				StreamUtil.generateNumbersJava9(0, 0, 1, 1).collect(Collectors.toUnmodifiableList()));
+		assertIterableEquals(List.of(1),
+				StreamUtil.generateNumbersJava9(1, 1, 1, 1).collect(Collectors.toUnmodifiableList()));
 
 	}
 }
