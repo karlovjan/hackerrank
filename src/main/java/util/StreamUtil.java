@@ -1,5 +1,7 @@
 package util;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 public class StreamUtil {
@@ -22,5 +24,15 @@ public class StreamUtil {
         }
 
         return builder.build();
+    }
+
+    public static <T> Stream<T> filterStreamByIndex(Stream<T> stream, int skipedIndex) {
+        AtomicInteger billIndex = new AtomicInteger();
+        return stream.filter(j -> billIndex.getAndIncrement() != skipedIndex);
+    }
+
+    public static <T> Stream<T> filterStreamByIndexes(Stream<T> stream, List<Integer> skipedIndexes) {
+        AtomicInteger billIndex = new AtomicInteger();
+        return stream.filter(j -> !skipedIndexes.contains(billIndex.getAndIncrement()));
     }
 }
