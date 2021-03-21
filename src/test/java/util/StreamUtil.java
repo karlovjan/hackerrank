@@ -1,7 +1,11 @@
 package util;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StreamUtil {
@@ -34,5 +38,13 @@ public class StreamUtil {
     public static <T> Stream<T> filterStreamByIndexes(Stream<T> stream, List<Integer> skipedIndexes) {
         AtomicInteger billIndex = new AtomicInteger();
         return stream.filter(j -> !skipedIndexes.contains(billIndex.getAndIncrement()));
+    }
+
+    public static Map<Integer, Integer> groupByAndSumInt(int[] ar) {
+        return Arrays.stream(ar).boxed().collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(Integer::intValue)));
+    }
+
+    public static Map<Integer, Long> groupByAndCountInt(int[] ar) {
+        return Arrays.stream(ar).boxed().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 }
