@@ -1,7 +1,6 @@
 package util;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -195,5 +194,54 @@ public class UtilTest {
 		assertIterableEquals(List.of(1),
 				StreamUtil.generateNumbersJava9(1, 1, 1, 1).collect(Collectors.toUnmodifiableList()));
 
+	}
+
+	public static boolean isInteger(double num) {
+		return num == Math.floor(num) && Double.isFinite(num) && Double.MAX_VALUE != num && Double.MIN_VALUE != num;
+	}
+
+	@Test
+	void isIntegerTest() {
+		assertTrue(isInteger(0));
+		assertTrue(isInteger(1));
+		assertTrue(isInteger(10));
+		assertTrue(isInteger(-1));
+		assertTrue(isInteger(-10));
+		assertTrue(isInteger(Integer.MIN_VALUE));
+		assertTrue(isInteger(Integer.MAX_VALUE));
+
+		assertTrue(isInteger(0.0));
+		assertTrue(isInteger(0d));
+		assertTrue(isInteger(-0d));
+
+		assertFalse(isInteger(0.1));
+		assertFalse(isInteger(0.5));
+		assertFalse(isInteger(0.6));
+		assertFalse(isInteger(1.1));
+		assertFalse(isInteger(1.7));
+		assertFalse(isInteger(10.7));
+
+		assertFalse(isInteger(-1.1));
+
+		assertFalse(isInteger(Double.POSITIVE_INFINITY));
+		assertFalse(isInteger(Double.NEGATIVE_INFINITY));
+		//		assertFalse(isInteger(Double.NaN));
+		assertFalse(isInteger(Double.MAX_VALUE));
+		assertFalse(isInteger(Double.MIN_VALUE));
+
+	}
+
+	public static int reversDigits(int num) {
+		int rev_num = 0;
+		while (num > 0) {
+			rev_num = rev_num * 10 + num % 10;
+			num = num / 10;
+		}
+		return rev_num;
+	}
+
+	@Test
+	void reversDigitsTest() {
+		assertEquals(7654321, reversDigits(1234567));
 	}
 }
