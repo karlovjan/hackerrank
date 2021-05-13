@@ -6,10 +6,12 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class StreamUtil {
 
@@ -53,5 +55,14 @@ public class StreamUtil {
 
     public static IntStream mergetIntArrays(int[] a1, int[] a2, BiFunction<Integer, Integer, Integer> mergeFnc){
         return Arrays.stream(a1).flatMap(item1 -> Arrays.stream(a2).map(item2 -> mergeFnc.apply(item1, item2)));
+    }
+
+    public static <T> Stream<T> takeWhileJava8(Stream<T> stream, Predicate<T> predicate) {
+        CustomSpliterator<T> customSpliterator = new CustomSpliterator<>(stream.spliterator(), predicate);
+        return StreamSupport.stream(customSpliterator, false);
+    }
+
+    public static <T> Stream<T> takeWhile(Stream<T> stream, Predicate<T> predicate) {
+        return stream.takeWhile(predicate);
     }
 }
