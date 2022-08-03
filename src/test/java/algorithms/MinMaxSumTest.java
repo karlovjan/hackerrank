@@ -2,6 +2,8 @@ package algorithms;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 public class MinMaxSumTest {
@@ -111,6 +113,55 @@ public class MinMaxSumTest {
 		}
 
 		return new long[] { minSum, maxSum };
+	}
+
+	public final class MinMaxSum {
+		long minSum;
+		long maxSum;
+
+		public MinMaxSum(long minSum, long maxSum) {
+			this.minSum = minSum;
+			this.maxSum = maxSum;
+		}
+	}
+
+	MinMaxSum minMaxSumImpList(List<Integer> arr) {
+		long minSum = 0;
+		long maxSum = 0;
+
+		int minArrItemIndex = 0;
+		int maxArrItemIndex = 0;
+
+		int maxItemTmp = 0;
+		int minItemTmp = 0;
+
+		for (int i = 0; i < arr.size(); i++) {
+			if (i == 0) {
+				//				init
+				maxItemTmp = arr.get(i);
+				minItemTmp = arr.get(i);
+			}
+			if (arr.get(i) > maxItemTmp) {
+				maxItemTmp = arr.get(i);
+				maxArrItemIndex = i;
+			} else if (arr.get(i) < minItemTmp) {
+				minItemTmp = arr.get(i);
+				minArrItemIndex = i;
+			}
+		}
+
+		//min ziskam kdyz odeberu z pole max value
+		//max ziskam kdyz odeberu z pole min value
+		for (int i = 0; i < arr.size(); i++) {
+			if (i != maxArrItemIndex) {
+				minSum += arr.get(i);
+			}
+			if (i != minArrItemIndex) {
+				maxSum += arr.get(i);
+			}
+		}
+
+		return new MinMaxSum(minSum, maxSum);
 	}
 
 }
