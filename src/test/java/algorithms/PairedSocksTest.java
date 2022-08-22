@@ -68,7 +68,7 @@ public class PairedSocksTest {
     }
 
     @Test
-    void splitTheBillTest() {
+    void countPairedSockTest() {
 
         assertEquals(3, countPairedSock(new int[]{10, 20, 20, 10, 10, 30, 50, 10, 20}));
         assertEquals(2, countPairedSock(new int[]{1, 2, 1, 2, 1, 2, 3}));
