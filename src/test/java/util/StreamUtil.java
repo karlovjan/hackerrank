@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -47,19 +46,21 @@ public class StreamUtil {
     }
 
     public static Map<Integer, Integer> groupByAndSumInt(int[] ar) {
-        return Arrays.stream(ar).boxed().collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(Integer::intValue)));
+        return Arrays.stream(ar).boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.summingInt(Integer::intValue)));
     }
 
     public static Map<Integer, Long> groupByAndCountInt(int[] ar) {
         return Arrays.stream(ar).boxed().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
-    //used as List<String> result3 = Utils.concatenateLists(list1,list2,list3);
-    //or u can use Stream.concat(A.stream(), B.stream())
+
+    // used as List<String> result3 = Utils.concatenateLists(list1,list2,list3);
+    // or u can use Stream.concat(A.stream(), B.stream())
     public static <T> List<T> concatenateLists(List<T>... collections) {
         return Arrays.stream(collections).flatMap(Collection::stream).collect(Collectors.toList());
     }
 
-    public static IntStream mergetIntArrays(int[] a1, int[] a2, BiFunction<Integer, Integer, Integer> mergeFnc){
+    public static IntStream mergetIntArrays(int[] a1, int[] a2, BiFunction<Integer, Integer, Integer> mergeFnc) {
         return Arrays.stream(a1).flatMap(item1 -> Arrays.stream(a2).map(item2 -> mergeFnc.apply(item1, item2)));
     }
 
