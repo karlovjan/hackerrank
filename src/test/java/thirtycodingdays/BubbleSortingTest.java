@@ -148,6 +148,11 @@ public class BubbleSortingTest {
         assertEquals(1, totalwaps);
         assertArrayEquals(new int[]{1, 2}, arr);
 
+        arr = new int[]{1, 10, 5, 3};
+        totalwaps = bubbleSortFromTask(arr);
+
+        assertEquals(3, totalwaps);
+        assertArrayEquals(new int[]{1, 3, 5, 10}, arr);
     }
 
 }
