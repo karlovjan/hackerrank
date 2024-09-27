@@ -84,5 +84,6 @@ public class BoyerMoorSearchTextAlgorithmTest {
 	void boyerMoor_test3() {
 		Assertions.assertIterableEquals(List.of(23), boyerMoor("cccccccccccccccccccccccab", "ab"));
 		Assertions.assertIterableEquals(List.of(5), boyerMoor("asldfjvozo", "jvo"));
+		Assertions.assertIterableEquals(List.of(4,19), boyerMoor("dkoepaplalcmzlklzslpaplakdlsasap", "papla"));
 	}
 }
