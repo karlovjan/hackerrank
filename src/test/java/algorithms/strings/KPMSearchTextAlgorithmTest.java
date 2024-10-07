@@ -85,7 +85,8 @@ public class KPMSearchTextAlgorithmTest {
 	
 	@Test
 	void kmp_test() {
-		Assertions.assertIterableEquals(List.of(1, 7, 10), kmp("bababaaababbababbaaa", "abab"));
+		Assertions.assertIterableEquals(List.of(3, 5, 7, 9, 11, 13), kmp("ababababababab", "abab"));
+		Assertions.assertIterableEquals(List.of(4, 10, 15), kmp("bababaaababbababbaaa", "abab"));
 	}
 
 }
