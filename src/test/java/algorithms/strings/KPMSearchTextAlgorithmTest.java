@@ -16,7 +16,7 @@ public class KPMSearchTextAlgorithmTest {
 
     List<Integer> kmp(String text, String pattern) {
         if (text == null || pattern == null || text.isEmpty() || pattern.isEmpty() || pattern.length() > text.length()) {
-            return new ArrayList<>(0);
+            return List.of();
         }
         List<Integer> foundList = new ArrayList<>();
         int[] failureTable = generateFailureTable(pattern);
