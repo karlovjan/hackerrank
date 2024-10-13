@@ -37,6 +37,7 @@ public class BoyerMoorSearchTextAlgorithmTest {
             if (j == -1) {
                 // match found at i
                 foundList.add(i);
+//                i += (m - 1) == 0 ? 1 : m - 1;  boyerMoor("aaaaa", "aaa") fails
                 ++i;
             } else {
                 shift = lastOccurrenceTable.getOrDefault(text.charAt(i + j), -1);
@@ -70,12 +71,16 @@ public class BoyerMoorSearchTextAlgorithmTest {
         Assertions.assertIterableEquals(List.of(0), boyerMoor("a", "a"));
         Assertions.assertIterableEquals(List.of(0), boyerMoor("aa", "aa"));
         Assertions.assertIterableEquals(List.of(0), boyerMoor("ab", "a"));
-        Assertions.assertIterableEquals(List.of(1), boyerMoor("aab", "ab"));
     }
 
     @Test
     void boyerMoor_test2() {
+        Assertions.assertIterableEquals(List.of(1), boyerMoor("aab", "ab"));
         Assertions.assertIterableEquals(List.of(1, 3), boyerMoor("aabab", "ab"));
+        Assertions.assertIterableEquals(List.of(0, 2, 4, 6), boyerMoor("abababa", "a"));
+        Assertions.assertIterableEquals(List.of(0, 2, 4), boyerMoor("abababa", "ab"));
+        Assertions.assertIterableEquals(List.of(0, 2, 4), boyerMoor("abababa", "aba"));
+        Assertions.assertIterableEquals(List.of(0, 1, 2), boyerMoor("aaaaa", "aaa"));
     }
 
     @Test
