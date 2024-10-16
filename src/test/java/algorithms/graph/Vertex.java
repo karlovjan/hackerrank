@@ -1,10 +1,11 @@
 package algorithms.graph;
 
+import java.util.Comparator;
 import java.util.Objects;
 
-public class Vertex<T> {
+public class Vertex<T> implements Comparator<Vertex<T>> {
     private final T data;
-    private final Integer weight;
+    private Integer weight;
 
     public Vertex(T data) {
         this(data, 1);
@@ -21,6 +22,15 @@ public class Vertex<T> {
 
     public Integer getWeight() {
         return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    @Override
+    public int compare(Vertex<T> vertex1, Vertex<T> vertex2) {
+        return vertex1.getWeight().compareTo(vertex2.getWeight());
     }
 
     @Override

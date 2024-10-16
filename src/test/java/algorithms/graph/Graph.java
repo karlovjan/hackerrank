@@ -17,6 +17,10 @@ public class Graph<T> {
         vertexMap.putIfAbsent(new Vertex<>(data), new LinkedList<>()); //putIfAbsent solves duplications
     }
 
+    void addVertex(Vertex<T> vertex) {
+        vertexMap.putIfAbsent(vertex, new LinkedList<>()); //putIfAbsent solves duplications
+    }
+
     void removeVertex(T data) {
         vertexMap.values().forEach(e -> e.remove(new Vertex<>(data)));
         vertexMap.remove(new Vertex<>(data));
@@ -29,9 +33,25 @@ public class Graph<T> {
         vertexMap.get(w).add(v);
     }
 
+    void addEdge(T vData, T wData, int edgeWeight) {
+        Vertex<T> v = new Vertex<>(vData, edgeWeight);
+        Vertex<T> w = new Vertex<>(wData, edgeWeight);
+        vertexMap.get(v).add(w);
+        vertexMap.get(w).add(v);
+    }
+
+    void addEdge(Vertex<T> v, Vertex<T> w) {
+        vertexMap.get(v).add(w);
+        vertexMap.get(w).add(v);
+    }
+
     void addDirectionalEdge(T vData, T wData) {
         Vertex<T> v = new Vertex<>(vData);
         Vertex<T> w = new Vertex<>(wData);
+        vertexMap.get(v).add(w);
+    }
+
+    void addDirectionalEdge(Vertex<T> v, Vertex<T> w) {
         vertexMap.get(v).add(w);
     }
 
@@ -111,4 +131,36 @@ public class Graph<T> {
         return visited;
     }
 
+    Map<T, Integer> dijkstras(T startVertexData) {
+        Map<T, Integer> distances = HashMap.newHashMap(vertexMap.size());
+        Set<T> visited = HashSet.newHashSet(vertexMap.size());
+        PriorityQueue<Vertex<T>> priorityQueue = new PriorityQueue<>();
+
+        //initialize the distance map with the default distance is set to null ( or Infinity = Integer.MAX_VALUE)
+        for (Vertex<T> v : vertexMap.keySet()) {
+            distances.put(v.getData(), null);
+        }
+        Vertex<T> startVertex = new Vertex<>(startVertexData, 0);
+        priorityQueue.add(startVertex);
+        distances.put(startVertex.getData(), startVertex.getWeight());
+
+        while (!priorityQueue.isEmpty() && visited.size() != vertexMap.size()) {
+
+            Vertex<T> vertex = priorityQueue.poll();
+
+            if (!visited.contains(vertex.getData())) {
+                visited.add(vertex.getData());
+                distances.put(startVertex.getData(), startVertex.getWeight());
+
+                for (Vertex<T> w : getAdjacencyVertices(vertex.getData())) {
+                    if (!visited.contains(w.getData())) {
+                        w.setWeight(vertex.getWeight() + w.getWeight());
+                        priorityQueue.add(w);
+                    }
+                }
+            }
+        }
+
+        return distances;
+    }
 }
