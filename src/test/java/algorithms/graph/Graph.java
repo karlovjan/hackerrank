@@ -2,7 +2,7 @@ package algorithms.graph;
 
 import java.util.*;
 
-public class Graph<T> {
+public class Graph<T extends Comparable<T>> {
     private final Map<Vertex<T>, List<Vertex<T>>> vertexMap; //or an adjacency matrix
 
     public Graph() {
@@ -150,12 +150,11 @@ public class Graph<T> {
 
             if (!visited.contains(vertex.getData())) {
                 visited.add(vertex.getData());
-                distances.put(startVertex.getData(), startVertex.getWeight());
+                distances.put(vertex.getData(), vertex.getWeight());
 
                 for (Vertex<T> w : getAdjacencyVertices(vertex.getData())) {
                     if (!visited.contains(w.getData())) {
-                        w.setWeight(vertex.getWeight() + w.getWeight());
-                        priorityQueue.add(w);
+                        priorityQueue.add(new Vertex<>(w.getData(), vertex.getWeight() + w.getWeight()));
                     }
                 }
             }
